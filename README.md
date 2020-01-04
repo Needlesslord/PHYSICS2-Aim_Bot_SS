@@ -30,6 +30,8 @@ To code the Aim Bot we are going to use the Montecarlo to implement the Verlet I
 
 #### Montecarlo
 
+# CHANGE ->
+
 
 ***
 
@@ -38,7 +40,7 @@ To code the Aim Bot we are going to use the Montecarlo to implement the Verlet I
 ## Goals
 
 
-#CHANGE ->
+# CHANGE ->
 
 Our goal for this project is to have an interactable integrator that, given an initial data, in our concrete case the initial position x and y, speed vx and vy, acceleration ax and ay, a radius, a density and elapsed time, it computes their values at the end of that given time. 
 Our intention is that it will also have a way to test the correct function of the integrator, which will print every frame and it will be able to pause it and a graphic representation. 
@@ -73,7 +75,7 @@ In addition, you can see in the following web pages more information on the topi
 #### Montecarlo
 
 
-#CHANGE ->
+# CHANGE ->
 
 
 ***
@@ -149,6 +151,8 @@ Instructions can be found in this same web page or in the readme.md file include
 ***
 
 
+# CHANGE ->
+
 
 ## Usage
 
@@ -212,7 +216,7 @@ The integrator has been made using C++, using SDL libraries.
 ## License
 
 
-Copyright (c) [2019] [Tomás Carreras, Enric-G. Durán, Núria Lamonja]
+Copyright (c) [2020] [Tomás Carreras, Enric-G. Durán, Núria Lamonja]
 
 Under the MIT License.
 
