@@ -1,5 +1,5 @@
 #include "object.h"
-#include "globals.h"
+
 
 //////// VARIABLES LIST ////////
 /*

@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include "globals.h"
 
 class object //sphere
 {
@@ -102,4 +103,5 @@ private:
 	double new_ax;
 	double new_ay;
 
+	float dt;
 };

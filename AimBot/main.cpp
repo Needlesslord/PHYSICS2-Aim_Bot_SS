@@ -10,7 +10,7 @@ bool PropagateAll(float v, float ang, object obs )
 	bullet.setX(0.0f);
 	bullet.setY(0.0f);
 	bullet.setAX(0.0f);
-	bullet.setAY(-9.81);
+	bullet.setAY(GRAVITY);
 	bullet.setVX(v*cos(ang));
 	bullet.setVY(v*sin(ang));
 	bullet.setDensity(100.0f);
