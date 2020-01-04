@@ -256,9 +256,8 @@ bool object::update(double time, object _object, double CR)
 		}
 
 		//Collision
-
-		/*if (x > _object.getX() - _object.getRadius() / 2 && x < _object.getX() + _object.getRadius() / 2 && x > _object.getY() - _object.getRadius() / 2 && x < _object.getY() + _object.getRadius() / 2)*/
-		if (x + this->getRadius() > _object.getX() - _object.getRadius() && y - getRadius() < _object.getY() + _object.getRadius())
+		if (x + this->getRadius() > _object.getX() - _object.getRadius() && y - getRadius() < _object.getY() + _object.getRadius() &&
+			x - this->getRadius() < _object.getX() + _object.getRadius() && y + getRadius() > _object.getY() - _object.getRadius())
 		return 1;
 		else if (y < 0)
 			return 0;

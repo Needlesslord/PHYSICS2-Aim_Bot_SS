@@ -1,5 +1,11 @@
+/*
+	inputX: the x inputed for the obstacle
+	inputY: the y inputed for the obstacle
+*/
+
 #include "object.h"
 #include <iostream>
+using namespace std;
 
 bool PropagateAll(float v, float ang, object obs )
 {
@@ -28,9 +34,12 @@ int main()
 {
 	object obstacle;
 
+	//Input obstacle's X and Y
+	float inputX, inputY; cout << "Input x: "; cin >> inputX; cout << "Input y: "; cin >> inputY;
+
 	//obstacle
-	obstacle.setX(51.0f);
-	obstacle.setY(10.0f);
+	obstacle.setX(inputX);
+	obstacle.setY(inputY);
 	obstacle.setAX(0.0f);
 	obstacle.setAY(0.0f);
 	obstacle.setVX(0.0f);
@@ -45,17 +54,25 @@ int main()
 	while (!collided)
 	{
 		cont++;
-		while (i < 100 && !collided)
+		while (i < 1000 && !collided)
 		{
 			i++;
-			v = rand() % 20;
-			ang = rand() % 90;		
+			float randomV = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 50.0));
+			v = randomV;
+			float randomAngle = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 3.141592));
+			ang = randomAngle;
 
 			if (PropagateAll(v, ang, obstacle))
 			{
 				collided = true;
-				std::cout << "Speed: " << v << std::endl << "Angle: " << ang << std::endl << "n: "<< i << std::endl;
+				cout << "Speed: " << v << endl << "Angle: " << ang << endl << "n: "<< i << endl;
 			}
+		}
+		cout << cont << endl;
+		if (cont > 1000) {
+			PropagateAll(50.0f, 0, obstacle);
+			cout << "Speed: 50.0f" << endl << "Angle: 0" << endl;
+			break;
 		}
 	}
 	system("pause");
