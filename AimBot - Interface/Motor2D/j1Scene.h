@@ -33,8 +33,12 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+
 	//Verlet Integrator Application
 	bool PropagateAll(float v, float ang, object target);
+	iPoint bulletv;
+
+
 
 
 private:
