@@ -114,25 +114,22 @@ public:
 
 	j1Physics();
 
-	// Destructor
 	virtual ~j1Physics();
-
-	// Called before render is available
 	bool Awake(pugi::xml_node&);
-
-	// Called before the first frame
 	bool Start();
-
-	// Called each loop iteration
 	bool Update(float dt);
-
-	// Called before quitting
 	bool CleanUp();
+	bool PropagateAll(float v, float ang, object target, bool draw = false);
+
+	bool running;
 
 	//this will be the object we'll aim at
 	object target;
 	SDL_Texture* target_tex;
 	SDL_Texture* bullet_tex;
+
+	bool collided;
+	iPoint bulletv;
 
 	//Input target's X and Y
 	float inputX;

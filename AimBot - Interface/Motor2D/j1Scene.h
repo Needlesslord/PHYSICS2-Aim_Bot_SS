@@ -33,18 +33,6 @@ public:
 
 	// Called before quitting
 	bool CleanUp();
-
-
-		//Verlet Integrator Application
-
-	
-	bool collided;
-
-	bool PropagateAll(float v, float ang, object target, bool draw = false);
-	iPoint bulletv;
-
-	
-
 private:
 	SDL_Texture* img;
 

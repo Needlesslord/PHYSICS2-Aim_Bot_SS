@@ -33,7 +33,7 @@ bool j1Physics::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool j1Physics::Start()
 {
-	bullet_tex = App->tex->Load("textures/dragonBall.png");
+	bullet_tex = App->tex->Load("textures/dragonBall2.png");
 	target.area = target.edge_length * target.edge_length;
 	target.mass = target.volume * target.density;
 	target.vx = 0.0f;
@@ -48,13 +48,52 @@ bool j1Physics::Start()
 	target.setY(inputY);
 	target.setEdgeLength(inputEdge);
 
+	collided = false;
 	return true;
 }
 
 // Called each loop iteration
 bool j1Physics::Update(float dt)
 {
-	if (App->scene->collided) App->render->Blit(, 0, 0);
+	if (collided) 
+		App->render->Blit(bullet_tex, 0, 0);
+
+	if(running)
+	unsigned int cont = 0;
+	while (!collided)
+	{
+		//Monte Carlo:
+		for (unsigned int i = 0; i < 1000 && !collided; i++)
+		{
+			//we give random values to the velocity and the angle for each attempt
+			//the velocity will be a semi-random value from 0 to 50 to avoid straight shots with infinite velocity which would guarantee a hit
+			float v = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 50.0f));
+
+			//the angle will be a semi-random value from 0 to pi radians to enable the target to be to the left of the bullet's initial position
+			float ang = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / pi));
+
+			//we try to hit the target with the random values
+			if (PropagateAll(v, ang, App->physics->target))
+			{
+				//we register the hit, which exits the loop
+				collided = true;
+				//angles will be expressed in degrees so we make the conversion
+				ang *= 360 / (2 * pi);
+				//we output the results found
+				//cout << "Speed: " << v << endl << "Angle: " << ang << " degrees" << endl << "Number of attempts: " << i << endl;
+			}
+			if (collided) PropagateAll(v, ang, App->physics->target, true);
+		}
+		//in case a result hasn't been found after 10.000 attempts the machine will try the maximum velocity in a straight line as a last try and then end the process
+		if (cont > 10) {
+			PropagateAll(50.0f, 0, App->physics->target);
+			//cout << "Speed: 50.0f" << endl << "Angle: 0" << endl;
+			break;
+		}
+		//we increase the number of Monte Carlo iterations
+		cont++;
+	}
+
 	return true;
 }
 
@@ -317,7 +356,31 @@ bool object::update(float time, object _target, float CR, bool draw)
 			return true;
 		else if (y < 0)
 			return false;
-		if (draw) App->render->Blit(bullet_tex, new_x, new_y);
+		if (draw) 
+			App->render->Blit(App->physics->bullet_tex, new_x, new_y);
+	}
+	return false;
+}
+
+
+////Called when Aiming (AimBot)
+bool j1Physics::PropagateAll(float v, float ang, object target, bool draw)
+{
+	float time = 3.0f;
+
+	object bullet;
+	bullet.setX(0.0f);
+	bullet.setY(0.0f);
+	bullet.setAX(0.0f);
+	bullet.setAY(GRAVITY);
+	bullet.setVX(v*cos(ang));
+	bullet.setVY(v*sin(ang));
+	bullet.setDensity(100.0f);
+	bullet.setEdgeLength(0.2f);
+
+	if (bullet.update(time, target, 1))
+	{
+		return true;
 	}
 	return false;
 }
