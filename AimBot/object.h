@@ -84,15 +84,11 @@ private:
 	float CF;
 
 	//elasticity
-	unsigned int isElastic;
+	bool isElastic;
 
 	//forces
 	float fx;
 	float fy;
-
-	//initial force
-	float initial_fx;
-	float initial_fy;
 
 	//friction force
 	float ff;

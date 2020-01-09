@@ -47,6 +47,7 @@ object::object()
 	vy = 0.0f;
 	ax = 0.0f;
 	ay = 0.0f;
+	isElastic = false;
 }
 
 object::~object() {}
@@ -181,7 +182,7 @@ bool object::checkCollission(object _object)
 		return false;
 }
 
-bool object::update(float time, object _object, float CR)
+bool object::update(float time, object _target, float CR)
 {
 	unsigned int second = 0;
 	unsigned int frame = 0;
@@ -206,13 +207,8 @@ bool object::update(float time, object _object, float CR)
 		vx = new_vx;
 
 		//Forces
-		fx = 0.5 * AIR_DENSITY * new_vx * new_vx * area * CD;
+		fx = 0.5 * AIR_DENSITY * new_vx * vx * area * CD;
 		
-		if (initial_fx != 0) {
-			fx += initial_fx;
-			initial_fx = 0;
-		}
-
 		if (new_y == 0) {
 			fx += ff;
 		}
@@ -236,16 +232,11 @@ bool object::update(float time, object _object, float CR)
 		//Forces
 		fy = 0.5 * AIR_DENSITY * new_vy * new_vy * area * CD;
 
-		if (initial_fy != 0) {
-			fy += initial_fy;
-			initial_fy = 0;
-		}
-
 		//Acceleration
 		if (new_vy <= 0.0)
-			new_ay = fy / mass + GRAVITY;
+			new_ay = (GRAVITY + fy) / mass;
 		else if (new_vy > 0.0)
-			new_ay = -fy / mass + GRAVITY;
+			new_ay = (GRAVITY - fy) / mass;
 
 		//Velocity
 		new_vy = vy + new_ay * dt;
@@ -254,19 +245,17 @@ bool object::update(float time, object _object, float CR)
 		new_y = y + vy * dt + (new_ay / 2.0) * dt * dt;
 
 		//Solving ground collision
-		if (new_y < edge_length && !isElastic)
+		if (new_y - edge_length <= 0)
 		{
 			new_y = edge_length;
-			new_vy = 0.0;
+			if(isElastic) new_vy = -new_vy;
+			else new_vy = 0.0;
 		}
-		else if (new_y < edge_length && isElastic)
-		{
-			new_vy = -new_vy;
-		}
+	
 
 		//Collision
-		if (x + this->getRadius() > _object.getX() - _object.getRadius() && y - getRadius() < _object.getY() + _object.getRadius() &&
-			x - this->getRadius() < _object.getX() + _object.getRadius() && y + getRadius() > _object.getY() - _object.getRadius())
+		if (x + this->getRadius() > _target.getX() - _target.getRadius() && y - getRadius() < _target.getY() + _target.getRadius() &&
+			x - this->getRadius() < _target.getX() + _target.getRadius() && y + getRadius() > _target.getY() - _target.getRadius())
 		return true;
 		else if (y < 0)
 			return false;

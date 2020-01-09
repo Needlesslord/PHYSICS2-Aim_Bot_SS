@@ -9,7 +9,7 @@
 #include <iostream>
 using namespace std;
 
-bool PropagateAll(float v, float ang, object obs )
+bool PropagateAll(float v, float ang, object target )
 {
 	float time = 3.0f;
 
@@ -23,7 +23,7 @@ bool PropagateAll(float v, float ang, object obs )
 	bullet.setDensity(100.0f);
 	bullet.setEdgeLength(0.2f);
 
-	if (bullet.update(time, obs, 1))
+	if (bullet.update(time, target, 1))
 	{
 		return true;
 	}
@@ -37,14 +37,14 @@ int main()
 	object target;
 
 	//Input target's X and Y
-	/*float inputX;
+	float inputX;
 	cout << "Input x: "; cin >> inputX; 
 	float inputY;
-	cout << "Input y: "; cin >> inputY;*/
+	cout << "Input y: "; cin >> inputY;
 
 	//target's properties
-	target.setX(2000);
-	target.setY(0);
+	target.setX(inputX);
+	target.setY(inputY);
 	target.setAX(0.0f);
 	target.setAY(0.0f);
 	target.setVX(0.0f);
@@ -62,7 +62,7 @@ int main()
 		{
 			//we give random values to the velocity and the angle for each attempt
 			//the velocity will be a semi-random value from 0 to 50 to avoid straight shots with infinite velocity which would guarantee a hit
-			float v = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 1000.0f));
+			float v = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 50.0f));
 
 			//the angle will be a semi-random value from 0 to pi radians to enable the target to be to the left of the bullet's initial position
 			float ang = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / pi));
