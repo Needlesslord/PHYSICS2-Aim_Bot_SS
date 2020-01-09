@@ -26,7 +26,8 @@ bool j1Physics::Awake(pugi::xml_node& config)
 	inputX = config.child("target").child("position").attribute("x").as_float();
 	inputY = config.child("target").child("position").attribute("y").as_float();
 	inputEdge = config.child("target").child("edge").attribute("length").as_float();
-	
+	bullet_position.x = config.child("bullet").child("position").attribute("x").as_float();
+	bullet_position.y = config.child("bullet").child("position").attribute("y").as_float();
 	return true;
 }
 
@@ -49,51 +50,52 @@ bool j1Physics::Start()
 	target.setEdgeLength(inputEdge);
 
 	collided = false;
+	running = false;
+
+	
 	return true;
 }
 
 // Called each loop iteration
 bool j1Physics::Update(float dt)
 {
-	if (collided) 
-		App->render->Blit(bullet_tex, 0, 0);
-
-	if(running)
-	unsigned int cont = 0;
-	while (!collided)
-	{
-		//Monte Carlo:
-		for (unsigned int i = 0; i < 1000 && !collided; i++)
+	if (running) {
+		unsigned int cont = 0;
+		while (!collided)
 		{
-			//we give random values to the velocity and the angle for each attempt
-			//the velocity will be a semi-random value from 0 to 50 to avoid straight shots with infinite velocity which would guarantee a hit
-			float v = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 50.0f));
-
-			//the angle will be a semi-random value from 0 to pi radians to enable the target to be to the left of the bullet's initial position
-			float ang = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / pi));
-
-			//we try to hit the target with the random values
-			if (PropagateAll(v, ang, App->physics->target))
+			//Monte Carlo:
+			for (unsigned int i = 0; i < 1000 && !collided; i++)
 			{
-				//we register the hit, which exits the loop
-				collided = true;
-				//angles will be expressed in degrees so we make the conversion
-				ang *= 360 / (2 * pi);
-				//we output the results found
-				//cout << "Speed: " << v << endl << "Angle: " << ang << " degrees" << endl << "Number of attempts: " << i << endl;
-			}
-			if (collided) PropagateAll(v, ang, App->physics->target, true);
-		}
-		//in case a result hasn't been found after 10.000 attempts the machine will try the maximum velocity in a straight line as a last try and then end the process
-		if (cont > 10) {
-			PropagateAll(50.0f, 0, App->physics->target);
-			//cout << "Speed: 50.0f" << endl << "Angle: 0" << endl;
-			break;
-		}
-		//we increase the number of Monte Carlo iterations
-		cont++;
-	}
+				//we give random values to the velocity and the angle for each attempt
+				//the velocity will be a semi-random value from 0 to 50 to avoid straight shots with infinite velocity which would guarantee a hit
+				float v = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 50.0f));
 
+				//the angle will be a semi-random value from 0 to pi radians to enable the target to be to the left of the bullet's initial position
+				float ang = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / pi));
+
+				//we try to hit the target with the random values
+				if (PropagateAll(v, ang, App->physics->target))
+				{
+					//we register the hit, which exits the loop
+					collided = true;
+					//angles will be expressed in degrees so we make the conversion
+					ang *= 360 / (2 * pi);
+					//we output the results found
+					//cout << "Speed: " << v << endl << "Angle: " << ang << " degrees" << endl << "Number of attempts: " << i << endl;
+				}
+				if (collided) PropagateAll(v, ang, App->physics->target, true);
+			}
+			//in case a result hasn't been found after 10.000 attempts the machine will try the maximum velocity in a straight line as a last try and then end the process
+			if (cont > 10) {
+				PropagateAll(50.0f, 0, App->physics->target);
+				//cout << "Speed: 50.0f" << endl << "Angle: 0" << endl;
+				break;
+			}
+			//we increase the number of Monte Carlo iterations
+			cont++;
+		}
+	}
+	App->render->Blit(bullet_tex, bullet_position.x, bullet_position.y);
 	return true;
 }
 

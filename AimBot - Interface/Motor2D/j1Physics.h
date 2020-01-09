@@ -129,7 +129,7 @@ public:
 	SDL_Texture* bullet_tex;
 
 	bool collided;
-	iPoint bulletv;
+	iPoint bullet_position;
 
 	//Input target's X and Y
 	float inputX;

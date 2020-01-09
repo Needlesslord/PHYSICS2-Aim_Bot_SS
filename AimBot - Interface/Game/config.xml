@@ -23,8 +23,9 @@
 
   <scene>
     <bullet>
-      <position x="10" y="60"/>
+      <position x="1" y="0"/>
       <elastic value="false"/>
+      <edge length="0.1"/>
     </bullet>
 
     <target>
