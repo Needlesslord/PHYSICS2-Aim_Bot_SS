@@ -5,103 +5,105 @@
 class object //sphere
 {
 public:
-	void setX(double _x);
+	object();
+	~object();
+	void setX(float _x);
 
-	void setY(double _y);
+	void setY(float _y);
 
-	void setVX(double _vx);
+	void setVX(float _vx);
 
-	void setVY(double _vy);
+	void setVY(float _vy);
 
-	void setAX(double _ax);
+	void setAX(float _ax);
 
-	void setAY(double _ay);
+	void setAY(float _ay);
 
-	void setEdgeLength(double _radius);
+	void setEdgeLength(float _radius);
 
-	void setDensity(double _density);
+	void setDensity(float _density);
 
-	double getX();
-
-	double getY();
-
-	double getVX();
-
-	double getVY();
-
-	double getAX();
-
-	double getAY();
-
-	double getRadius();
-
-	double getArea();
-
-	double getVolume();
-
-	double getDensity();
-
-	double getMass();
-
-	double getFX();
-
-	double getFY();
-
-	double distanceTo(object _object);
+	float getX();
+	
+	float getY();
+	
+	float getVX();
+	
+	float getVY();
+	
+	float getAX();
+	
+	float getAY();
+	
+	float getRadius();
+	
+	float getArea();
+	
+	float getVolume();
+	
+	float getDensity();
+	
+	float getMass();
+	
+	float getFX();
+	
+	float getFY();
+	
+	float distanceTo(object _object);
 
 	bool checkCollission(object _object);
 
-	bool update(double time, object _object, double CR);
+	bool update(float time, object _object, float CR);
 
 private:
 	//position
-	double x = 0.0;
-	double y = 0.0;
+	float x;
+	float y;
 
 	//velocity
-	double vx = 0.0;
-	double vy = 0.0;
+	float vx;
+	float vy;
 
 	//acceleration
-	double ax = 0.0;
-	double ay = 0.0;
+	float ax;
+	float ay;
 
 	//object dimensions
-	double edge_length = 1.0;
-	double area = edge_length * edge_length;
-	double volume = edge_length * edge_length * edge_length;
+	float edge_length;
+	float area;
+	float volume;
 
 	//mass
-	double density = 1000.0;
-	double mass = volume * density;
+	float density;
+	float mass;
 
 	//drag coefficient
-	double CD = 1.05;
+	float CD;
 
 	//coefficient of friction
-	double CF = 0.0;
+	float CF;
 
 	//elasticity
-	int isElastic = 0;
+	unsigned int isElastic;
 
 	//forces
-	double fx = 0.0;
-	double fy = 0.0;
+	float fx;
+	float fy;
 
 	//initial force
-	double initial_fx = 0.0;
-	double initial_fy = 0.0;
+	float initial_fx;
+	float initial_fy;
 
 	//friction force
-	double ff = 0.0;
+	float ff;
 
 	//updated data
-	double new_x;
-	double new_y;
-	double new_vx;
-	double new_vy;
-	double new_ax;
-	double new_ay;
+	float new_x;
+	float new_y;
+	float new_vx;
+	float new_vy;
+	float new_ax;
+	float new_ay;
 
 	float dt;
 };

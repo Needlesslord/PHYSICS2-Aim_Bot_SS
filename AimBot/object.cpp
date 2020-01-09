@@ -38,131 +38,142 @@ bool checkCollision() compares two object positions, if their distance is less t
 
 */
 
+object::object()
+{
+	edge_length = 1.0f;
+	area = edge_length * edge_length;
+	mass = volume * density;
+	vx = 0.0f;
+	vy = 0.0f;
+	ax = 0.0f;
+	ay = 0.0f;
+}
 
+object::~object() {}
 
 //set
 
-void object::setX(double _x)
+void object::setX(float _x)
 {
 	x = _x;
 }
 
-void object::setY(double _y)
+void object::setY(float _y)
 {
 	y = _y;
 }
 
-void object::setVX(double _vx)
+void object::setVX(float _vx)
 {
 	vx = _vx;
 }
 
-void object::setVY(double _vy)
+void object::setVY(float _vy)
 {
 	vy = _vy;
 }
 
-void object::setAX(double _ax)
+void object::setAX(float _ax)
 {
 	ax = _ax;
 }
 
-void object::setAY(double _ay)
+void object::setAY(float _ay)
 {
 	ay = _ay;
 }
 
-void object::setEdgeLength(double _edgeLength)
+void object::setEdgeLength(float _edgeLength)
 {
 	edge_length = _edgeLength;
 }
 
-void object::setDensity(double _density)
+void object::setDensity(float _density)
 {
 	density = _density;
 }
 
 //get
 
-double object::getX()
+float object::getX()
 {
 	return x;
 }
 
-double object::getY()
+float object::getY()
 {
 	return y;
 }
 
-double object::getVX()
+float object::getVX()
 {
 	return vx;
 }
 
-double object::getVY()
+float object::getVY()
 {
 	return vy;
 }
 
-double object::getAX()
+float object::getAX()
 {
 	return ax;
 }
 
-double object::getAY()
+float object::getAY()
 {
 	return ay;
 }
 
-double object::getRadius()
+float object::getRadius()
 {
 	return edge_length;
 }
 
-double object::getArea()
+float object::getArea()
 {
 	return area;
 }
 
-double object::getVolume()
+float object::getVolume()
 {
 	return volume;
 }
 
-double object::getDensity()
+float object::getDensity()
 {
 	return density;
 }
 
-double object::getMass()
+float object::getMass()
 {
 	return mass;
 }
 
-double object::getFX()
+float object::getFX()
 {
 	return fx;
 }
 
-double object::getFY()
+float object::getFY()
 {
 	return fy;
 }
 
-double object::distanceTo(object _object)
+float object::distanceTo(object _object)
 {
-	double distanceX = abs(new_x - _object.x) - (edge_length / 2 - _object.edge_length / 2);
-	double distanceY = abs(new_y - _object.y) - (edge_length / 2 - _object.edge_length / 2);
+	float distanceX = abs(new_x - _object.x) - (edge_length / 2 - _object.edge_length / 2);
+	float distanceY = abs(new_y - _object.y) - (edge_length / 2 - _object.edge_length / 2);
 
-	double distance = sqrt(distanceX * distanceX + distanceY * distanceY);
+	float distance = sqrt(distanceX * distanceX + distanceY * distanceY);
 
 	return distance;
 }
 
 bool object::checkCollission(object _object)
 {
-	double distanceX = abs(new_x - _object.x);
-	double distanceY = abs(new_y - _object.y);
+	float distanceX = abs(new_x - _object.x);
+	float distanceY = abs(new_y - _object.y);
 
 	if (distanceX <= 0.0 || distanceY <= 0.0)
 		return true;
@@ -170,7 +181,7 @@ bool object::checkCollission(object _object)
 		return false;
 }
 
-bool object::update(double time, object _object, double CR)
+bool object::update(float time, object _object, float CR)
 {
 	unsigned int second = 0;
 	unsigned int frame = 0;
@@ -218,8 +229,6 @@ bool object::update(double time, object _object, double CR)
 		//Position
 		new_x = x + vx * dt + (new_ax / 2.0) * dt * dt;
 
-		//Y
-
 		//Updating previous frame variables
 		y = new_y;
 		vy = new_vy;
@@ -258,9 +267,9 @@ bool object::update(double time, object _object, double CR)
 		//Collision
 		if (x + this->getRadius() > _object.getX() - _object.getRadius() && y - getRadius() < _object.getY() + _object.getRadius() &&
 			x - this->getRadius() < _object.getX() + _object.getRadius() && y + getRadius() > _object.getY() - _object.getRadius())
-		return 1;
+		return true;
 		else if (y < 0)
-			return 0;
+			return false;
 	}
-	return 0;
+	return false;
 }
