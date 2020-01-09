@@ -105,7 +105,7 @@ public:
 
 	float dt;
 
-	SDL_Texture* bullet_tex;
+	
 };
 
 class j1Physics : public j1Module
@@ -132,6 +132,7 @@ public:
 	//this will be the object we'll aim at
 	object target;
 	SDL_Texture* target_tex;
+	SDL_Texture* bullet_tex;
 
 	//Input target's X and Y
 	float inputX;

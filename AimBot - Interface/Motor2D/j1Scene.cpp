@@ -60,7 +60,7 @@ bool j1Scene::Update(float dt)
 	///////////////////////////
 	
 	
-	if (collided) App->render->Blit(img, 0, 0);
+	
 	unsigned int cont = 0;
 	while (!collided)
 	{

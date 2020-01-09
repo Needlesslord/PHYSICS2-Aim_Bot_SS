@@ -33,7 +33,7 @@ bool j1Physics::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool j1Physics::Start()
 {
-	target.bullet_tex = App->tex->Load("textures/dragonBall.png");
+	bullet_tex = App->tex->Load("textures/dragonBall.png");
 	target.area = target.edge_length * target.edge_length;
 	target.mass = target.volume * target.density;
 	target.vx = 0.0f;
@@ -54,6 +54,7 @@ bool j1Physics::Start()
 // Called each loop iteration
 bool j1Physics::Update(float dt)
 {
+	if (App->scene->collided) App->render->Blit(, 0, 0);
 	return true;
 }
 
