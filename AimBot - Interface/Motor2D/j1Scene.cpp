@@ -7,31 +7,32 @@
 #include "j1Render.h"
 #include "j1Window.h"
 #include "j1Scene.h"
-#include "object.h"
+#include "j1Physics.h"
+#include "globals.h"
+#include <iostream>
 
-j1Scene::j1Scene() : j1Module()
+j1Scene::j1Scene() 
 {
 	name.create("scene");
 }
 
-// Destructor
-j1Scene::~j1Scene()
-{}
+j1Scene::~j1Scene() {}
 
 // Called before render is available
-bool j1Scene::Awake()
+bool j1Scene::Awake(pugi::xml_node& config)
 {
 	LOG("Loading Scene");
-	bool ret = true;
 
-	return ret;
+	return true;
 }
 
 // Called before the first frame
 bool j1Scene::Start()
 {
 	img = App->tex->Load("textures/test.png");
-	App->audio->PlayMusic("audio/music/music_sadpiano.ogg");
+	//App->audio->PlayMusic("audio/music/music_sadpiano.ogg"); //TODO: uncomment
+
+	collided = false;
 	return true;
 }
 
@@ -44,7 +45,6 @@ bool j1Scene::PreUpdate()
 // Called each loop iteration
 bool j1Scene::Update(float dt)
 {
-	// TODO 1: Request Load / Save on application when pressing L/S
 	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
 		App->load = true;
 
@@ -59,25 +59,8 @@ bool j1Scene::Update(float dt)
 	// AIMBOT IMPLEMENTATION //
 	///////////////////////////
 	
-	//this will be the object we'll aim at
-	object target;
-
-	//Input target's X and Y
-	float inputX = 0;
-	float inputY = 0;
-
-	//target's properties
-	target.setX(inputX);
-	target.setY(inputY);
-	target.setAX(0.0f);
-	target.setAY(0.0f);
-	target.setVX(0.0f);
-	target.setVY(0.0f);
-	target.setEdgeLength(1.0f);
-	target.setDensity(HUGE_VAL);
-
-
-	bool collided = false;
+	
+	if (collided) App->render->Blit(img, 0, 0);
 	unsigned int cont = 0;
 	while (!collided)
 	{
@@ -92,7 +75,7 @@ bool j1Scene::Update(float dt)
 			float ang = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / pi));
 
 			//we try to hit the target with the random values
-			if (PropagateAll(v, ang, target))
+			if (PropagateAll(v, ang, App->physics->target))
 			{
 				//we register the hit, which exits the loop
 				collided = true;
@@ -101,10 +84,11 @@ bool j1Scene::Update(float dt)
 				//we output the results found
 				//cout << "Speed: " << v << endl << "Angle: " << ang << " degrees" << endl << "Number of attempts: " << i << endl;
 			}
+			if (collided) PropagateAll(v, ang, App->physics->target, true);
 		}
 		//in case a result hasn't been found after 10.000 attempts the machine will try the maximum velocity in a straight line as a last try and then end the process
 		if (cont > 10) {
-			PropagateAll(50.0f, 0, target);
+			PropagateAll(50.0f, 0, App->physics->target);
 			//cout << "Speed: 50.0f" << endl << "Angle: 0" << endl;
 			break;
 		}
@@ -135,8 +119,8 @@ bool j1Scene::CleanUp()
 	return true;
 }
 
-//Called when Aiming (AimBot)
-bool j1Scene::PropagateAll(float v, float ang, object target)
+////Called when Aiming (AimBot)
+bool j1Scene::PropagateAll(float v, float ang, object target, bool draw)
 {
 	float time = 3.0f;
 

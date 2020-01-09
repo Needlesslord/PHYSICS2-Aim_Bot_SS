@@ -2,9 +2,10 @@
 #define __j1SCENE_H__
 
 #include "j1Module.h"
-#include "object.h"
+#include "j1Physics.h"
 
 struct SDL_Texture;
+class object;
 
 class j1Scene : public j1Module
 {
@@ -16,7 +17,7 @@ public:
 	virtual ~j1Scene();
 
 	// Called before render is available
-	bool Awake();
+	bool Awake(pugi::xml_node&);
 
 	// Called before the first frame
 	bool Start();
@@ -34,12 +35,15 @@ public:
 	bool CleanUp();
 
 
-	//Verlet Integrator Application
-	bool PropagateAll(float v, float ang, object target);
+		//Verlet Integrator Application
+
+	
+	bool collided;
+
+	bool PropagateAll(float v, float ang, object target, bool draw = false);
 	iPoint bulletv;
 
-
-
+	
 
 private:
 	SDL_Texture* img;

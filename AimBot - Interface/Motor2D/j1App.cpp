@@ -10,6 +10,7 @@
 #include "j1Textures.h"
 #include "j1Audio.h"
 #include "j1Scene.h"
+#include "j1Physics.h"
 #include "j1App.h"
 
 // Constructor
@@ -23,6 +24,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	tex = new j1Textures();
 	audio = new j1Audio();
 	scene = new j1Scene();
+	physics = new j1Physics();
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
@@ -31,6 +33,7 @@ j1App::j1App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(tex);
 	AddModule(audio);
 	AddModule(scene);
+	AddModule(physics);
 
 	// render last to swap buffer
 	AddModule(render);
@@ -151,7 +154,6 @@ void j1App::PrepareUpdate()
 // ---------------------------------------------
 void j1App::FinishUpdate()
 {
-	// TODO 2: This is a good place to call load / Save functions
 	if (save)
 		Save();
 	if (load)
@@ -267,7 +269,6 @@ const char* j1App::GetOrganization() const
 }
 
 
-// TODO 5: Fill the application load function
 // Start by opening the file as an xml_document (as with config file)
 bool j1App::Load()
 {
@@ -300,7 +301,6 @@ bool j1App::Load()
 	return ret;
 }
 
-// TODO 7: Fill the application save function
 // Generate a new pugi::xml_document and create a node for each module.
 // Call each module's save function and then save the file using pugi::xml_document::save_file()
 bool j1App::Save()

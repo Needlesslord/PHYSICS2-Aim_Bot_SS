@@ -12,6 +12,7 @@ class j1Render;
 class j1Textures;
 class j1Audio;
 class j1Scene;
+class j1Physics;
 
 class j1App
 {
@@ -64,7 +65,6 @@ private:
 	// Call modules after each loop iteration
 	bool PostUpdate();
 
-	// TODO 2: Create the functions for Loading / Saving the game state (leave those empty for now)
 	bool Save();
 	bool Load();
 
@@ -77,6 +77,7 @@ public:
 	j1Textures*			tex;
 	j1Audio*			audio;
 	j1Scene*			scene;
+	j1Physics*			physics;
 
 	bool save = false;
 	bool load = false;

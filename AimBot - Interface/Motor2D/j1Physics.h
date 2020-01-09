@@ -1,7 +1,9 @@
-#pragma once
-#include <iostream>
-#include "globals.h"
+#ifndef __j1PHYSICS_H__
+#define __j1PHYSICS_H__
 
+#include "j1Module.h"
+
+struct SDL_Texture;
 class object //sphere
 {
 public:
@@ -24,38 +26,38 @@ public:
 	void setDensity(float _density);
 
 	float getX();
-	
+
 	float getY();
-	
+
 	float getVX();
-	
+
 	float getVY();
-	
+
 	float getAX();
-	
+
 	float getAY();
-	
+
 	float getRadius();
-	
+
 	float getArea();
-	
+
 	float getVolume();
-	
+
 	float getDensity();
-	
+
 	float getMass();
-	
+
 	float getFX();
-	
+
 	float getFY();
-	
+
 	float distanceTo(object _object);
 
 	bool checkCollission(object _object);
 
-	bool update(float time, object _object, float CR);
+	bool update(float time, object _object, float CR, bool draw = false);
 
-private:
+
 	//position
 	float x;
 	float y;
@@ -102,4 +104,39 @@ private:
 	float new_ay;
 
 	float dt;
+
+	SDL_Texture* bullet_tex;
 };
+
+class j1Physics : public j1Module
+{
+public:
+
+	j1Physics();
+
+	// Destructor
+	virtual ~j1Physics();
+
+	// Called before render is available
+	bool Awake(pugi::xml_node&);
+
+	// Called before the first frame
+	bool Start();
+
+	// Called each loop iteration
+	bool Update(float dt);
+
+	// Called before quitting
+	bool CleanUp();
+
+	//this will be the object we'll aim at
+	object target;
+	SDL_Texture* target_tex;
+
+	//Input target's X and Y
+	float inputX;
+	float inputY;
+	float inputEdge;
+};
+
+#endif // __j1PHYSICS_H__

@@ -1,5 +1,69 @@
-#include "object.h"
+#include "p2Defs.h"
+#include "p2Log.h"
+#include "j1App.h"
+#include "j1Input.h"
+#include "j1Textures.h"
+#include "j1Audio.h"
+#include "j1Render.h"
+#include "j1Window.h"
+#include "j1Scene.h"
+#include "j1Physics.h"
+#include "globals.h"
+#include <iostream>
 
+j1Physics::j1Physics()
+{
+	name.create("scene");
+}
+
+j1Physics::~j1Physics() {}
+
+// Called before render is available
+bool j1Physics::Awake(pugi::xml_node& config)
+{
+	LOG("Loading Scene");
+
+	inputX = config.child("target").child("position").attribute("x").as_float();
+	inputY = config.child("target").child("position").attribute("y").as_float();
+	inputEdge = config.child("target").child("edge").attribute("length").as_float();
+	
+	return true;
+}
+
+// Called before the first frame
+bool j1Physics::Start()
+{
+	target.bullet_tex = App->tex->Load("textures/dragonBall.png");
+	target.area = target.edge_length * target.edge_length;
+	target.mass = target.volume * target.density;
+	target.vx = 0.0f;
+	target.vy = 0.0f;
+	target.ax = 0.0f;
+	target.ay = 0.0f;
+	target.isElastic = false;
+	target.setDensity(HUGE_VAL);
+
+	//target's properties
+	target.setX(inputX);
+	target.setY(inputY);
+	target.setEdgeLength(inputEdge);
+
+	return true;
+}
+
+// Called each loop iteration
+bool j1Physics::Update(float dt)
+{
+	return true;
+}
+
+// Called before quitting
+bool j1Physics::CleanUp()
+{
+	LOG("Freeing scene");
+
+	return true;
+}
 
 //////// VARIABLES LIST ////////
 /*
@@ -40,14 +104,7 @@ bool checkCollision() compares two object positions, if their distance is less t
 
 object::object()
 {
-	edge_length = 1.0f;
-	area = edge_length * edge_length;
-	mass = volume * density;
-	vx = 0.0f;
-	vy = 0.0f;
-	ax = 0.0f;
-	ay = 0.0f;
-	isElastic = false;
+	
 }
 
 object::~object() {}
@@ -182,7 +239,7 @@ bool object::checkCollission(object _object)
 		return false;
 }
 
-bool object::update(float time, object _target, float CR)
+bool object::update(float time, object _target, float CR, bool draw)
 {
 	unsigned int second = 0;
 	unsigned int frame = 0;
@@ -208,7 +265,7 @@ bool object::update(float time, object _target, float CR)
 
 		//Forces
 		fx = 0.5 * AIR_DENSITY * new_vx * vx * area * CD;
-		
+
 		if (new_y == 0) {
 			fx += ff;
 		}
@@ -248,17 +305,18 @@ bool object::update(float time, object _target, float CR)
 		if (new_y - edge_length <= 0)
 		{
 			new_y = edge_length;
-			if(isElastic) new_vy = -new_vy;
+			if (isElastic) new_vy = -new_vy;
 			else new_vy = 0.0;
 		}
-	
+
 
 		//Collision
 		if (x + this->getRadius() > _target.getX() - _target.getRadius() && y - getRadius() < _target.getY() + _target.getRadius() &&
 			x - this->getRadius() < _target.getX() + _target.getRadius() && y + getRadius() > _target.getY() - _target.getRadius())
-		return true;
+			return true;
 		else if (y < 0)
 			return false;
+		if (draw) App->render->Blit(bullet_tex, new_x, new_y);
 	}
 	return false;
 }

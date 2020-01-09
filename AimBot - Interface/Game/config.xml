@@ -2,8 +2,7 @@
 
 <config>
   <app>
-    <title>Game Development Testbed</title>
-    <organization>UPC</organization>
+    <title>AimBot</title>
   </app>
 	
   <renderer>
@@ -22,4 +21,15 @@
     <fullscreen_window value="false"/>
   </window>
 
+  <scene>
+    <bullet>
+      <position x="10" y="60"/>
+      <elastic value="false"/>
+    </bullet>
+
+    <target>
+      <position x="10" y="60"/>
+      <edge length="1"/>
+    </target>
+  </scene>
 </config>
