@@ -1,0 +1,21 @@
+<!-- Config file for the game -->
+<config>
+  <title>Ninja Frog Against Gravity</title>
+  
+  <window>
+    <resolution width="1024" height="768" scale="1"/>
+    <fullscreen value="false"/>
+    <borderless value="false"/>
+    <resizable value="true"/>
+    <fullscreen_window value="false"/>
+  </window>
+
+  <bullet>
+    <position x="10" y="60"/>
+    
+  </bullet>
+  
+  <obstacle>
+    <position x="10" y="60"/>
+  </obstacle>
+</config>

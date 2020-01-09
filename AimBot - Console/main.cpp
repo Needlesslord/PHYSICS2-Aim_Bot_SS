@@ -9,7 +9,7 @@
 #include <iostream>
 using namespace std;
 
-bool PropagateAll(float v, float ang, object target )
+bool PropagateAll(float v, float ang, object target)
 {
 	float time = 3.0f;
 
@@ -36,11 +36,13 @@ int main()
 	//this will be the object we'll aim at
 	object target;
 
+
 	//Input target's X and Y
 	float inputX;
 	cout << "Input x: "; cin >> inputX; 
 	float inputY;
 	cout << "Input y: "; cin >> inputY;
+
 
 	//target's properties
 	target.setX(inputX);
@@ -59,8 +61,8 @@ int main()
 	{
 		//Monte Carlo:
 		for (unsigned int i = 0; i < 1000 && !collided; i++)
-		{
-			//we give random values to the velocity and the angle for each attempt
+		{	//we give random values to the velocity and the angle for each attempt
+
 			//the velocity will be a semi-random value from 0 to 50 to avoid straight shots with infinite velocity which would guarantee a hit
 			float v = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 50.0f));
 
@@ -72,8 +74,10 @@ int main()
 			{
 				//we register the hit, which exits the loop
 				collided = true;
+
 				//angles will be expressed in degrees so we make the conversion
 				ang *= 360 / (2 * pi);
+
 				//we output the results found
 				cout << "Speed: " << v << endl << "Angle: " << ang << " degrees" << endl << "Number of attempts: " << i << endl;
 			}
