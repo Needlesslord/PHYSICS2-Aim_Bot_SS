@@ -135,6 +135,9 @@ public:
 	float inputX;
 	float inputY;
 	float inputEdge;
+
+	// Load
+	bool Load(pugi::xml_node&);
 };
 
 #endif // __j1PHYSICS_H__

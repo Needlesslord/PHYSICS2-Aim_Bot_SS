@@ -386,3 +386,11 @@ bool j1Physics::PropagateAll(float v, float ang, object target, bool draw)
 	}
 	return false;
 }
+
+
+bool j1Physics::Load(pugi::xml_node& saved)
+{
+	//volume = saved.child("volume").attribute("value").as_int();
+
+	return true;
+}
