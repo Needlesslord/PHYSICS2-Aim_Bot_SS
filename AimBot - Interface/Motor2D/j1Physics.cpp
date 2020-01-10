@@ -34,7 +34,7 @@ bool j1Physics::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool j1Physics::Start()
 {
-	bullet_tex = App->tex->Load("textures/dragonBall2.png");
+	bullet_tex = App->tex->Load("textures/dragonBall.png");
 	target.area = target.edge_length * target.edge_length;
 	target.mass = target.volume * target.density;
 	target.vx = 0.0f;

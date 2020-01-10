@@ -29,7 +29,7 @@ bool j1Scene::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool j1Scene::Start()
 {
-	img = App->tex->Load("textures/test.png");
+	bg_tex = App->tex->Load("textures/background.png");
 	//App->audio->PlayMusic("audio/music/music_sadpiano.ogg"); //TODO: uncomment
 
 	
@@ -54,6 +54,7 @@ bool j1Scene::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_KP_MINUS) == KEY_DOWN && App->audio->volume > 0)
 		App->audio->volume -= 2;
 
+	App->render->Blit(bg_tex, -150, 0);
 
 	return true;
 }

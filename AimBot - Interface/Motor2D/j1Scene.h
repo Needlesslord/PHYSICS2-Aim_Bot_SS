@@ -34,7 +34,7 @@ public:
 	// Called before quitting
 	bool CleanUp();
 private:
-	SDL_Texture* img;
+	SDL_Texture* bg_tex;
 
 };
 
