@@ -143,6 +143,9 @@ public:
 	//elasticity
 	bool isElastic;
 
+	//Hit/Miss
+	bool miss;
+
 };
 
 #endif // __j1PHYSICS_H__

@@ -110,7 +110,11 @@ bool j1Physics::Update(float dt)
 				collided = true;
 				running = false;
 				break;
+
+				miss = true;
 			}
+			else
+				miss = false;
 			//we increase the number of Monte Carlo iterations
 			cont++;
 		}
@@ -195,6 +199,12 @@ bool j1Physics::Update(float dt)
 			bullet.new_x - bullet.getRadius() < target.getX() + target.getRadius() && bullet.new_y + bullet.getRadius() > target.getY() - target.getRadius())
 			running = false;
 		App->render->Blit(bullet_tex, bullet.new_x, 600 - bullet.new_y);
+
+		//Print Hit/Miss
+		if (!App->physics->miss)
+			App->render->Blit(App->scene->hit_tex, 380, 50);
+		else
+			App->render->Blit(App->scene->miss_tex, 380, 50);
 	}
 	return true;
 }
@@ -471,10 +481,10 @@ bool j1Physics::Load(pugi::xml_node& saved)
 	if (inputX > 900)
 		inputX = 900;
 	if(inputX < 70)
-		inputY = 70;
-	if (inputY > 500)
-		inputX = 500;
-	if (inputX < 0)
+		inputX = 70;
+	if (inputY > 600)
+		inputY = 600;
+	if (inputY < 0)
 		inputY = 0;
 	target.setX(inputX);
 	target.setY(inputY);
@@ -501,6 +511,7 @@ bool j1Physics::Load(pugi::xml_node& saved)
 	//Load Bullet Density
 	if (saved.child("bullet").child("density").attribute("value").as_float() != 0)
 		bullet.setDensity(saved.child("bullet").child("density").attribute("value").as_float());
+
 
 	//APPLY MONTECARLO AGAIN
 
@@ -533,8 +544,12 @@ bool j1Physics::Load(pugi::xml_node& saved)
 			solution_ang = 0.0f;
 			collided = true;
 			running = false;
+
+			miss = true;
 			break;
 		}
+		else
+			miss = false;
 		//we increase the number of Monte Carlo iterations
 		cont++;
 	}

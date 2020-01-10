@@ -30,6 +30,8 @@ bool j1Scene::Awake(pugi::xml_node& config)
 bool j1Scene::Start()
 {
 	bg_tex = App->tex->Load("textures/background.png");
+	hit_tex = App->tex->Load("textures/hit.png");
+	miss_tex = App->tex->Load("textures/miss.png");
 	App->audio->PlayMusic("audio/music/music.ogg");
 
 	kicking = false;
@@ -58,6 +60,7 @@ bool j1Scene::Update(float dt)
 	App->render->Blit(bg_tex, -150, 0);
 	App->render->Blit(App->physics->target_tex_boo, App->physics->inputX, 550 - App->physics->inputY);
 
+	//Kick
 	if (timer > 10) 
 	{
 		kicking = false;
@@ -70,6 +73,9 @@ bool j1Scene::Update(float dt)
 	}
 	else
 		App->render->Blit(App->physics->origin_tex_vegetta_SS, App->physics->bullet_position.x - 70, 400 - App->physics->bullet_position.y);
+
+
+	
 
 	return true;
 }

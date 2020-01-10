@@ -33,8 +33,13 @@ public:
 
 	// Called before quitting
 	bool CleanUp();
+
+	SDL_Texture* hit_tex;
+	SDL_Texture* miss_tex;
+
 private:
 	SDL_Texture* bg_tex;
+
 	uint timer;
 public:
 	bool kicking;

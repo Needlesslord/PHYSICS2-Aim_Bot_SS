@@ -1,4 +1,11 @@
-<?xml version="1.0"?>
+<!-- 
+_______________________________________________________
+
+     CHANGE THESE VALUES TO EXPERIMENT WITH 
+                   OUR AIMBOT
+_______________________________________________________
+
+-->
 <save>
 	<input />
 	<window />
@@ -11,6 +18,7 @@
 		<camera x="0" y="0" />
 	</renderer>
   <physics>
+    
     <bullet>
       <position x="30" y="0"/>
       <density value="1000.0f"/>
@@ -18,8 +26,9 @@
     </bullet>
 
     <target>
-      <position x="700" y="100"/>
+      <position x="100" y="500"/>
       <edge length="1"/>
     </target>
+    
   </physics>
 </save>
