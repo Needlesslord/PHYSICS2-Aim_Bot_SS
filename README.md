@@ -37,11 +37,23 @@ The Montecarlo method uses a loop inside a loop. In the internal loop, the funct
 Basically, in general, the MC relies on a repeated random sampling (we require a sequence of numbers which are random, independent, real and uniformly distributed in the range zero to one) when it’s difficult to impossible to use other more deterministic approaches. It is used in optimization, integration and probability distribution.
 
 [Wikipedia: Monte Carlo Method](https://en.wikipedia.org/wiki/Monte_Carlo_method)
+
+
 [Arxiv](https://arxiv.org/pdf/cond-mat/0104167.pdf)
+
+
 [Barkema FPSPXIII](http://itf.fys.kuleuven.be/~fpspXIII/material/Barkema_FPSPXIII.pdf)
+
+
 [Rummukai: Montecarlo](https://www.mv.helsinki.fi/home/rummukai/lectures/montecarlo_oulu/lectures/mc_notes1.pdf)
+
+
 [Towards data science](https://towardsdatascience.com/the-house-always-wins-monte-carlo-simulation-eb82787da2a3)
+
+
 [Palisade: Montecarlo Simulation](https://www.palisade.com/risk/monte_carlo_simulation.asp)
+
+
 [Science Direct: Montecarlo Method](https://www.sciencedirect.com/topics/neuroscience/monte-carlo-method)
 
 
@@ -132,7 +144,7 @@ Design and Development (co-team leaders):
 
 
 We would like to thank David de la Torre, who has helped with this project and given us kind advice.
-This project has been done for CITM-TTC under the MIT License with .
+This project has been done for CITM-TTC under the MIT License with C++ and SDL libraries.
 
 
 
@@ -143,7 +155,7 @@ This project has been done for CITM-TTC under the MIT License with .
 ## Download to the latest release
 
 
-Here you can go to the release page and download the different versions available. Just click on the release, unzip it once downloaded and you can play clicking the Application.
+Here you can go to the release page and download the different versions available. Just click on the release, unzip it once downloaded and you can use it by clicking the Application.
 Instructions can be found in this same web page or in the readme.md file included in the zip.
 
 
