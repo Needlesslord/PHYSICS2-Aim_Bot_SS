@@ -24,13 +24,26 @@ To code the Aim Bot we are going to use the Montecarlo to implement the Verlet I
 
 #### Verlet Integration
 
- - Verlet Integration is a numerical method used to integrate Newton’s equations of motion. It is frequently used to calculate trajectories of particles in molecular dynamics simulations and computer graphics. (https://en.wikipedia.org/wiki/Verlet_integration)
+Verlet Integration is a numerical method used to integrate Newton’s equations of motion. It is frequently used to calculate trajectories of particles in molecular dynamics simulations and computer graphics. 
 
- - The Verlet integrator provides good numerical stability, as well as other properties that are important in physical systems such as time reversibility and preservation of the symplectic form on phase space, at no significant additional computational cost over the simple Euler method. (https://en.wikipedia.org/wiki/Verlet_integration)
+The Verlet integrator provides good numerical stability, as well as other properties that are important in physical systems such as time reversibility and preservation of the symplectic form on phase space, at no significant additional computational cost over the simple Euler method. 
+
+[Wikipedia: Verlet Integration](https://en.wikipedia.org/wiki/Verlet_integration)
 
 #### Montecarlo
 
-# CHANGE ->
+The Montecarlo method uses a loop inside a loop. In the internal loop, the function runs for X times a random angle and velocity and computes for each one if the projectile reached the objective using a function, which in our case it will be called “PropagateAll()”, and the Verlet Integrator. In the external loop, this loop is limited to frames so the screen doesn’t freeze. This is the concrete case for video games. 
+
+Basically, in general, the MC relies on a repeated random sampling (we require a sequence of numbers which are random, independent, real and uniformly distributed in the range zero to one) when it’s difficult to impossible to use other more deterministic approaches. It is used in optimization, integration and probability distribution.
+
+[Wikipedia: Monte Carlo Method](https://en.wikipedia.org/wiki/Monte_Carlo_method)
+[Arxiv](https://arxiv.org/pdf/cond-mat/0104167.pdf)
+[Barkema FPSPXIII](http://itf.fys.kuleuven.be/~fpspXIII/material/Barkema_FPSPXIII.pdf)
+[Rummukai: Montecarlo](https://www.mv.helsinki.fi/home/rummukai/lectures/montecarlo_oulu/lectures/mc_notes1.pdf)
+[Towards data science](https://towardsdatascience.com/the-house-always-wins-monte-carlo-simulation-eb82787da2a3)
+[Palisade: Montecarlo Simulation](https://www.palisade.com/risk/monte_carlo_simulation.asp)
+[Science Direct: Montecarlo Method](https://www.sciencedirect.com/topics/neuroscience/monte-carlo-method)
+
 
 
 ***
@@ -40,17 +53,7 @@ To code the Aim Bot we are going to use the Montecarlo to implement the Verlet I
 ## Goals
 
 
-# CHANGE ->
-
-Our goal for this project is to have an interactable integrator that, given an initial data, in our concrete case the initial position x and y, speed vx and vy, acceleration ax and ay, a radius, a density and elapsed time, it computes their values at the end of that given time. 
-Our intention is that it will also have a way to test the correct function of the integrator, which will print every frame and it will be able to pause it and a graphic representation. 
-In addition, the Newton's Laws will be implemented in order to compare the results of the integrator with the final data and see the accuracy and the standard deviation. 
-
-
-Our frame rate will be of 60 fps. 
-Air density will be implemented, as well as gravity. 
-We will have a ground and the ball will be able to collide with it. 
-Frame per frame we are going to be calculating each variable to update it.
+Therefore, our main goal for this project is to get a Montecarlo well implemented in the Aim Bot with an interface. The user will be able to change the the input through an .xml file. The input is going to be the position of the bullet, the position of the target, if the collision is elastic or completely inelastic and the mass of the bullet. The program is not intended to have a rerun option, but if there is time, it will be considered. The Aim Bot won’t freeze the screen, so if the target is not found it will throw the bullet at a set speed and angle and notify the user the object has not been found.
 
 
 
@@ -74,8 +77,8 @@ In addition, you can see in the following web pages more information on the topi
 
 #### Montecarlo
 
+The Montecarlo, since it is a method, it does not use formulas. What it does is set the velocity and the angle randomly in between some parameters to later implement the Verlet Method to calculate if the bullet hits the objective or not.
 
-# CHANGE ->
 
 
 ***
@@ -85,7 +88,7 @@ In addition, you can see in the following web pages more information on the topi
 ## Installation
 
 
-Go to our GitHub repository and download the .zip. Go To the folder "Integrator - console", open the solution and Debug it.
+Go to our GitHub repository and download the .zip. Decompress the .zip and start the app.
 
 Enjoy!
 
@@ -129,7 +132,7 @@ Design and Development (co-team leaders):
 
 
 We would like to thank David de la Torre, who has helped with this project and given us kind advice.
-This project has been done for CITM-TTC under the MIT License.
+This project has been done for CITM-TTC under the MIT License with .
 
 
 
@@ -151,8 +154,6 @@ Instructions can be found in this same web page or in the readme.md file include
 ***
 
 
-# CHANGE ->
-
 
 ## Usage
 
@@ -161,8 +162,12 @@ Instructions can be found in this same web page or in the readme.md file include
 
 	COMPUTER KEYBOARD ONLY
 
+	[R]			Restart the simulation with the data updated from the .xml
+	[ENTER]/[RETURN]	Start the simulation. It can be restarted as many times as you want.
 
-In each step, the user will receive instructions of what data or keys they should press. In addition, there is a tutorial at the begining explaining everything.
+To input the data open the "input.xml" file and change the variables. 
+
+(*) Note that you can run the app, change the values and press [R] to reload the new data and continue using it without closing the app.
 
 
 
