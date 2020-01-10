@@ -29,10 +29,10 @@ bool j1Scene::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool j1Scene::Start()
 {
-	img = App->tex->Load("textures/test.png");
-	//App->audio->PlayMusic("audio/music/music_sadpiano.ogg"); //TODO: uncomment
+	bg_tex = App->tex->Load("textures/background.png");
+	App->audio->PlayMusic("audio/music/music.ogg");
 
-	
+	kicking = false;
 	return true;
 }
 
@@ -45,15 +45,31 @@ bool j1Scene::PreUpdate()
 // Called each loop iteration
 bool j1Scene::Update(float dt)
 {
-	if (App->input->GetKey(SDL_SCANCODE_L) == KEY_DOWN)
+	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
 		App->load = true;
 
-	if (App->input->GetKey(SDL_SCANCODE_KP_PLUS) == KEY_DOWN && App->audio->volume < 128)
+	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN && App->audio->volume < 128)
 		App->audio->volume += 2;
 
-	if (App->input->GetKey(SDL_SCANCODE_KP_MINUS) == KEY_DOWN && App->audio->volume > 0)
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN && App->audio->volume > 0)
 		App->audio->volume -= 2;
 
+	//Rendering background, Vegetta and Boo
+	App->render->Blit(bg_tex, -150, 0);
+	App->render->Blit(App->physics->target_tex_boo, App->physics->inputX, 550 - App->physics->inputY);
+
+	if (timer > 10) 
+	{
+		kicking = false;
+		timer = 0;
+	}
+	else if (kicking) 
+	{
+		App->render->Blit(App->physics->origin_tex_vegetta_SS_kick, App->physics->bullet_position.x - 70, 400 - App->physics->bullet_position.y);
+		timer++;
+	}
+	else
+		App->render->Blit(App->physics->origin_tex_vegetta_SS, App->physics->bullet_position.x - 70, 400 - App->physics->bullet_position.y);
 
 	return true;
 }

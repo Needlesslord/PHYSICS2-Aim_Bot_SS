@@ -34,8 +34,10 @@ public:
 	// Called before quitting
 	bool CleanUp();
 private:
-	SDL_Texture* img;
-
+	SDL_Texture* bg_tex;
+	uint timer;
+public:
+	bool kicking;
 };
 
 #endif // __j1SCENE_H__

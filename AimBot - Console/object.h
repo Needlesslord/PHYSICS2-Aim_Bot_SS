@@ -53,8 +53,7 @@ public:
 
 	bool checkCollission(object _object);
 
-	bool update(float time, object _object, float CR);
-
+	bool update(float time, object _object, float CR, bool console = false);
 private:
 	//position
 	float x;

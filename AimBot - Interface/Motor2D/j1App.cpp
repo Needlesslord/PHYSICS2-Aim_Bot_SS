@@ -277,11 +277,11 @@ bool j1App::Load()
 	pugi::xml_document  save_file;
 	pugi::xml_node savenode;
 
-	pugi::xml_parse_result result = save_file.load_file("savegame.xml");
+	pugi::xml_parse_result result = save_file.load_file("input.xml");
 
 	if (result == NULL)
 	{
-		LOG("Could not load map xml file savegame.xml. pugi error: %s", result.description());
+		LOG("Could not load map xml file input.xml. pugi error: %s", result.description());
 		ret = false;
 	}
 	else
@@ -323,6 +323,6 @@ bool j1App::Save()
 		item = item->next;
 	}
 
-	savefile.save_file("savegame.xml");
+	savefile.save_file("input.xml");
 	return ret;
 }

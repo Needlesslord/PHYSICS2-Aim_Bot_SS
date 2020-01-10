@@ -13,7 +13,7 @@
 
 j1Physics::j1Physics()
 {
-	name.create("scene");
+	name.create("physics");
 }
 
 j1Physics::~j1Physics() {}
@@ -21,79 +21,181 @@ j1Physics::~j1Physics() {}
 // Called before render is available
 bool j1Physics::Awake(pugi::xml_node& config)
 {
-	LOG("Loading Scene");
+	LOG("Loading Physics");
 
 	inputX = config.child("target").child("position").attribute("x").as_float();
 	inputY = config.child("target").child("position").attribute("y").as_float();
 	inputEdge = config.child("target").child("edge").attribute("length").as_float();
-	
+	bullet_position.x = config.child("bullet").child("position").attribute("x").as_float();
+	bullet_position.y = config.child("bullet").child("position").attribute("y").as_float();
+
 	return true;
 }
 
 // Called before the first frame
 bool j1Physics::Start()
 {
-	bullet_tex = App->tex->Load("textures/dragonBall2.png");
+	bullet_tex = App->tex->Load("textures/dragonBall.png");
+	target_tex_boo = App->tex->Load("textures/boo.png");
+	origin_tex_vegetta_SS = App->tex->Load("textures/vegetta.png");
+	origin_tex_vegetta_SS_kick = App->tex->Load("textures/vegetta_kick.png");
+
+	//Bullet's base Values. Some will get overwritten and some will be definitive
+	bullet.setEdgeLength(0.2f);
+	bullet.area = bullet.edge_length * bullet.edge_length;
+	bullet.volume = bullet.edge_length * bullet.edge_length * bullet.edge_length;
+	bullet.setDensity(10000.0f);
+	bullet.mass = bullet.volume * bullet.density;
+	bullet.CD = 1.05;
+	bullet.CF = 0.0f;
+	bullet.ff = 0.0f;
+	bullet.vx = 0.0f;
+	bullet.vy = 0.0f;
+	bullet.ax = 0.0f;
+	bullet.ay = 0.0f;
+
+	//target's properties inputed
+	target.setX(inputX);
+	target.setY(inputY);
+	target.setEdgeLength(inputEdge);
+
+	//Traget's base Values.Some will get overwritten and some will be definitive
 	target.area = target.edge_length * target.edge_length;
 	target.mass = target.volume * target.density;
 	target.vx = 0.0f;
 	target.vy = 0.0f;
 	target.ax = 0.0f;
 	target.ay = 0.0f;
-	target.isElastic = false;
-	target.setDensity(HUGE_VAL);
-
-	//target's properties
-	target.setX(inputX);
-	target.setY(inputY);
-	target.setEdgeLength(inputEdge);
+	target.setDensity(HUGE_VAL);	
 
 	collided = false;
+	running = true;
+	isElastic = true;
+	
 	return true;
 }
 
 // Called each loop iteration
 bool j1Physics::Update(float dt)
 {
-	if (collided) 
-		App->render->Blit(bullet_tex, 0, 0);
-
-	if(running)
-	unsigned int cont = 0;
-	while (!collided)
+	//Initial calculations
+	if (running && !collided) 
 	{
-		//Monte Carlo:
-		for (unsigned int i = 0; i < 1000 && !collided; i++)
+		unsigned int cont = 0;
+		while (!collided)
 		{
-			//we give random values to the velocity and the angle for each attempt
-			//the velocity will be a semi-random value from 0 to 50 to avoid straight shots with infinite velocity which would guarantee a hit
-			float v = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 50.0f));
-
-			//the angle will be a semi-random value from 0 to pi radians to enable the target to be to the left of the bullet's initial position
-			float ang = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / pi));
-
-			//we try to hit the target with the random values
-			if (PropagateAll(v, ang, App->physics->target))
+			//Monte Carlo:
+			for (unsigned int i = 0; i < 1000 && !collided; i++)
 			{
-				//we register the hit, which exits the loop
-				collided = true;
-				//angles will be expressed in degrees so we make the conversion
-				ang *= 360 / (2 * pi);
-				//we output the results found
-				//cout << "Speed: " << v << endl << "Angle: " << ang << " degrees" << endl << "Number of attempts: " << i << endl;
+				//we give random values to the velocity and the angle for each attempt
+				//the velocity will be a semi-random value from 0 to 50 to avoid straight shots with infinite velocity which would guarantee a hit
+				solution_v = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 700.0f));
+
+				//the angle will be a semi-random value from 0 to pi radians to enable the target to be to the left of the bullet's initial position
+				solution_ang = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / pi));
+
+				//we try to hit the target with the random values
+				if (PropagateAll(solution_v, solution_ang, App->physics->target))
+				{
+					//we register the hit, which exits the loop
+					collided = true;
+					running = false;
+				}
+				
 			}
-			if (collided) PropagateAll(v, ang, App->physics->target, true);
+			//in case a result hasn't been found after 10.000 attempts the machine will try the maximum velocity in a straight line as a last try and then end the process
+			if (cont > 10) {
+				solution_v = 50.0f;
+				solution_ang = 0.0f;
+				collided = true;
+				running = false;
+				break;
+			}
+			//we increase the number of Monte Carlo iterations
+			cont++;
 		}
-		//in case a result hasn't been found after 10.000 attempts the machine will try the maximum velocity in a straight line as a last try and then end the process
-		if (cont > 10) {
-			PropagateAll(50.0f, 0, App->physics->target);
-			//cout << "Speed: 50.0f" << endl << "Angle: 0" << endl;
-			break;
-		}
-		//we increase the number of Monte Carlo iterations
-		cont++;
 	}
 
+	//Ready to show the calculated solution graphically
+	if (!running && collided)
+	{
+		if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
+		{
+			float time = 3.0f;
+
+			//Reset all the base values to start from the same point as before
+			bullet.setX(App->physics->bullet_position.x);
+			bullet.new_x = bullet.x;
+			bullet.setY(App->physics->bullet_position.y);
+			bullet.new_y = bullet.y;
+			bullet.setAX(0.0f);
+			bullet.new_ax = bullet.ax;
+			bullet.setAY(GRAVITY);
+			bullet.new_y = bullet.y;
+			bullet.vx = solution_v*cos(solution_ang);
+			bullet.new_vx = bullet.vx;
+			bullet.vy = solution_v*sin(solution_ang);
+			bullet.new_vy = bullet.vy;
+			running = true;
+
+			//this is just to change Vegetta's sprite for a second
+			App->scene->kicking = true;
+		}
+	}
+	
+	if (running && collided)
+	{
+		dt = 1.0 / fps;
+
+		//X
+		//Updating previous frame variables
+		bullet.x = bullet.new_x;
+		bullet.vx = bullet.new_vx;
+
+		//Forces
+		bullet.fx = 0.5 * AIR_DENSITY *bullet.vx * bullet.vx * bullet.area * bullet.CD;
+
+		if (bullet.new_y == 0) {
+			bullet.fx += bullet.ff;
+		}
+
+		//Acceleration
+		if (bullet.new_vx <= 0.0)
+			bullet.new_ax = bullet.fx / bullet.mass;
+		else
+			bullet.new_ax = -bullet.fx / bullet.mass;
+
+		//Velocity
+		bullet.new_vx = bullet.vx + bullet.new_ax * dt;
+
+		//Position
+		bullet.new_x = bullet.x + bullet.vx * dt + (bullet.new_ax / 2.0) * dt * dt;
+
+		//Updating previous frame variables
+		bullet.y = bullet.new_y;
+		bullet.vy = bullet.new_vy;
+
+		//Forces
+		bullet.fy = 0.5 * AIR_DENSITY * bullet.new_vy * bullet.new_vy * bullet.area * bullet.CD;
+
+		//Acceleration
+		if (bullet.new_vy <= 0.0)
+			bullet.new_ay = (GRAVITY + bullet.fy) / bullet.mass;
+		else if (bullet.new_vy > 0.0)
+			bullet.new_ay = (GRAVITY - bullet.fy) / bullet.mass;
+
+		//Velocity
+		bullet.new_vy = bullet.vy + bullet.new_ay * dt;
+
+		//Position
+		bullet.new_y = bullet.y + bullet.vy * dt + (bullet.new_ay / 2.0) * dt * dt;
+
+		//Collision with target
+		if (bullet.new_x + bullet.getRadius() > target.getX() - target.getRadius() && bullet.new_y - bullet.getRadius() < target.getY() + target.getRadius() &&
+			bullet.new_x - bullet.getRadius() < target.getX() + target.getRadius() && bullet.new_y + bullet.getRadius() > target.getY() - target.getRadius())
+			running = false;
+		App->render->Blit(bullet_tex, bullet.new_x, 600 - bullet.new_y);
+	}
 	return true;
 }
 
@@ -142,15 +244,6 @@ bool checkCollision() compares two object positions, if their distance is less t
 
 */
 
-object::object()
-{
-	
-}
-
-object::~object() {}
-
-//set
-
 void object::setX(float _x)
 {
 	x = _x;
@@ -192,7 +285,6 @@ void object::setDensity(float _density)
 }
 
 //get
-
 float object::getX()
 {
 	return x;
@@ -279,7 +371,7 @@ bool object::checkCollission(object _object)
 		return false;
 }
 
-bool object::update(float time, object _target, float CR, bool draw)
+bool object::update(float time, object _target, float CR)
 {
 	unsigned int second = 0;
 	unsigned int frame = 0;
@@ -291,20 +383,19 @@ bool object::update(float time, object _target, float CR, bool draw)
 	new_y = y;
 	new_vx = vx;
 	new_vy = vy;
-
+	
 
 	for (frame = 0; frame < time * fps; frame++)
 	{
 		dt = 1.0 / fps;
 
 		//X
-
 		//Updating previous frame variables
 		x = new_x;
 		vx = new_vx;
 
 		//Forces
-		fx = 0.5 * AIR_DENSITY * new_vx * vx * area * CD;
+		fx = 0.5 * AIR_DENSITY * vx * vx * area * CD;
 
 		if (new_y == 0) {
 			fx += ff;
@@ -341,46 +432,111 @@ bool object::update(float time, object _target, float CR, bool draw)
 		//Position
 		new_y = y + vy * dt + (new_ay / 2.0) * dt * dt;
 
-		//Solving ground collision
-		if (new_y - edge_length <= 0)
-		{
-			new_y = edge_length;
-			if (isElastic) new_vy = -new_vy;
-			else new_vy = 0.0;
-		}
-
-
-		//Collision
-		if (x + this->getRadius() > _target.getX() - _target.getRadius() && y - getRadius() < _target.getY() + _target.getRadius() &&
-			x - this->getRadius() < _target.getX() + _target.getRadius() && y + getRadius() > _target.getY() - _target.getRadius())
+		//Collision with target
+		if (new_x + this->getRadius() > _target.getX() - _target.getRadius() && new_y - getRadius() < _target.getY() + _target.getRadius() &&
+			new_x - this->getRadius() < _target.getX() + _target.getRadius() && new_y + getRadius() > _target.getY() - _target.getRadius())
 			return true;
-		else if (y < 0)
+		else if (new_y < 0)
 			return false;
-		if (draw) 
-			App->render->Blit(App->physics->bullet_tex, new_x, new_y);
 	}
 	return false;
 }
 
 
-////Called when Aiming (AimBot)
-bool j1Physics::PropagateAll(float v, float ang, object target, bool draw)
+//Called when Aiming (AimBot)
+bool j1Physics::PropagateAll(float v, float ang, object target)
 {
 	float time = 3.0f;
 
-	object bullet;
-	bullet.setX(0.0f);
-	bullet.setY(0.0f);
+	bullet.setX(App->physics->bullet_position.x);
+	bullet.setY(App->physics->bullet_position.y);
 	bullet.setAX(0.0f);
 	bullet.setAY(GRAVITY);
 	bullet.setVX(v*cos(ang));
 	bullet.setVY(v*sin(ang));
-	bullet.setDensity(100.0f);
-	bullet.setEdgeLength(0.2f);
-
+	
 	if (bullet.update(time, target, 1))
 	{
 		return true;
 	}
 	return false;
+}
+
+
+bool j1Physics::Load(pugi::xml_node& saved)
+{
+	//Load Target Position within Window
+	inputX = saved.child("target").child("position").attribute("x").as_float();
+	inputY = saved.child("target").child("position").attribute("y").as_float();
+	if (inputX > 900)
+		inputX = 900;
+	if(inputX < 70)
+		inputY = 70;
+	if (inputY > 500)
+		inputX = 500;
+	if (inputX < 0)
+		inputY = 0;
+	target.setX(inputX);
+	target.setY(inputY);
+	//Load Target Radius
+	if(saved.child("target").child("edge").attribute("length").as_float() < 0)
+		target.setEdgeLength(saved.child("target").child("edge").attribute("length").as_float());
+
+	//Load Bullet Initial Position within Window
+	bullet.x = saved.child("bullet").child("position").attribute("x").as_float();
+	bullet.y = saved.child("bullet").child("position").attribute("y").as_float();
+	if (bullet.x > 900)
+		bullet.x = 900;
+	if (bullet.x < 70)
+		bullet.x = 70;
+	if (bullet.y > 500)
+		bullet.y = 500;
+	if (bullet.y < 0)
+		bullet.y = 0;
+	bullet_position.x = bullet.x;
+	bullet_position.y = bullet.y;
+	//Load Bullet Radius
+	if(saved.child("bullet").child("edge").attribute("length").as_float() < 0)
+		bullet.setEdgeLength(saved.child("bullet").child("edge").attribute("length").as_float());
+	//Load Bullet Density
+	if (saved.child("bullet").child("density").attribute("value").as_float() < 0)
+		bullet.setDensity(saved.child("bullet").child("density").attribute("value").as_float());
+
+	//APPLY MONTECARLO AGAIN
+
+	collided = false;
+	unsigned int cont = 0;
+	while (!collided)
+	{
+		//Monte Carlo:
+		for (unsigned int i = 0; i < 1000 && !collided; i++)
+		{
+			//we give random values to the velocity and the angle for each attempt
+			//the velocity will be a semi-random value from 0 to 50 to avoid straight shots with infinite velocity which would guarantee a hit
+			solution_v = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 700.0f));
+
+			//the angle will be a semi-random value from 0 to pi radians to enable the target to be to the left of the bullet's initial position
+			solution_ang = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / pi));
+
+			//we try to hit the target with the random values
+			if (PropagateAll(solution_v, solution_ang, App->physics->target))
+			{
+				//we register the hit, which exits the loop
+				collided = true;
+				running = false;
+			}
+
+		}
+		//in case a result hasn't been found after 10.000 attempts the machine will try the maximum velocity in a straight line as a last try and then end the process
+		if (cont > 10) {
+			solution_v = 50.0f;
+			solution_ang = 0.0f;
+			collided = true;
+			running = false;
+			break;
+		}
+		//we increase the number of Monte Carlo iterations
+		cont++;
+	}
+		return true;
 }

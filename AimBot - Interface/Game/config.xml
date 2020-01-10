@@ -1,12 +1,20 @@
-<!-- Config file for the game -->
+<!-- 
+_______________________________________________________
 
+      DO NOT CHANGE THESE VALUES 
+      
+      IF YOU WISH TO CHANGE VALUES FOR THE AIMBOT,
+      USE INPUT.XML
+_______________________________________________________
+
+-->
 <config>
   <app>
     <title>AimBot</title>
   </app>
 	
   <renderer>
-    <vsync value="false"/>
+    <vsync value="true"/>
   </renderer>
 
   <audio>
@@ -21,15 +29,16 @@
     <fullscreen_window value="false"/>
   </window>
 
-  <scene>
+  <physics>
     <bullet>
-      <position x="10" y="60"/>
+      <position x="70" y="0"/>
       <elastic value="false"/>
+      <edge length="0.1"/>
     </bullet>
 
     <target>
-      <position x="10" y="60"/>
+      <position x="700" y="100"/>
       <edge length="1"/>
     </target>
-  </scene>
+  </physics>
 </config>
