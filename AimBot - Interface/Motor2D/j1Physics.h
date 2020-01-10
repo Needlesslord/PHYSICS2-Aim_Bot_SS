@@ -7,8 +7,6 @@ struct SDL_Texture;
 class object //sphere
 {
 public:
-	object();
-	~object();
 	void setX(float _x);
 
 	void setY(float _y);
@@ -55,7 +53,7 @@ public:
 
 	bool checkCollission(object _object);
 
-	bool update(float time, object _object, float CR, bool draw = false);
+	bool update(float time, object _object, float CR);
 
 
 	//position
@@ -84,9 +82,6 @@ public:
 
 	//coefficient of friction
 	float CF;
-
-	//elasticity
-	bool isElastic;
 
 	//forces
 	float fx;
@@ -119,7 +114,7 @@ public:
 	bool Start();
 	bool Update(float dt);
 	bool CleanUp();
-	bool PropagateAll(float v, float ang, object target, bool draw = false);
+	bool PropagateAll(float v, float ang, object target);
 
 	bool running;
 
@@ -128,6 +123,7 @@ public:
 	SDL_Texture* target_tex;
 	SDL_Texture* bullet_tex;
 
+	object bullet;
 	bool collided;
 	iPoint bullet_position;
 
@@ -138,6 +134,13 @@ public:
 
 	// Load
 	bool Load(pugi::xml_node&);
+
+	float solution_v;
+	float solution_ang;
+
+	//elasticity
+	bool isElastic;
+
 };
 
 #endif // __j1PHYSICS_H__

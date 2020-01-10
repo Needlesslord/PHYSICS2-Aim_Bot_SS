@@ -6,7 +6,7 @@
   </app>
 	
   <renderer>
-    <vsync value="false"/>
+    <vsync value="true"/>
   </renderer>
 
   <audio>
@@ -23,13 +23,13 @@
 
   <scene>
     <bullet>
-      <position x="1" y="0"/>
+      <position x="30" y="0"/>
       <elastic value="false"/>
       <edge length="0.1"/>
     </bullet>
 
     <target>
-      <position x="10" y="60"/>
+      <position x="500" y="100"/>
       <edge length="1"/>
     </target>
   </scene>
