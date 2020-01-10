@@ -39,6 +39,8 @@ bool j1Physics::Start()
 	target_tex_boo = App->tex->Load("textures/boo.png");
 	origin_tex_vegetta_SS = App->tex->Load("textures/vegetta.png");
 	origin_tex_vegetta_SS_kick = App->tex->Load("textures/vegetta_kick.png");
+
+	//Bullet's base Values. Some will get overwritten and some will be definitive
 	bullet.setEdgeLength(0.2f);
 	bullet.area = bullet.edge_length * bullet.edge_length;
 	bullet.volume = bullet.edge_length * bullet.edge_length * bullet.edge_length;
@@ -57,6 +59,7 @@ bool j1Physics::Start()
 	target.setY(inputY);
 	target.setEdgeLength(inputEdge);
 
+	//Traget's base Values.Some will get overwritten and some will be definitive
 	target.area = target.edge_length * target.edge_length;
 	target.mass = target.volume * target.density;
 	target.vx = 0.0f;
@@ -75,6 +78,7 @@ bool j1Physics::Start()
 // Called each loop iteration
 bool j1Physics::Update(float dt)
 {
+	//Initial calculations
 	if (running && !collided) 
 	{
 		unsigned int cont = 0;
@@ -112,12 +116,14 @@ bool j1Physics::Update(float dt)
 		}
 	}
 
+	//Ready to show the calculated solution graphically
 	if (!running && collided)
 	{
 		if (App->input->GetKey(SDL_SCANCODE_RETURN) == KEY_DOWN)
 		{
 			float time = 3.0f;
 
+			//Reset all the base values to start from the same point as before
 			bullet.setX(App->physics->bullet_position.x);
 			bullet.new_x = bullet.x;
 			bullet.setY(App->physics->bullet_position.y);
@@ -132,16 +138,13 @@ bool j1Physics::Update(float dt)
 			bullet.new_vy = bullet.vy;
 			running = true;
 
+			//this is just to change Vegetta's sprite for a second
 			App->scene->kicking = true;
 		}
 	}
 	
 	if (running && collided)
 	{
-		/*for (int i = 0; i < 10000000; i++) 
-		{
-			dt = 1.0 / fps;
-		}*/
 		dt = 1.0 / fps;
 
 		//X
@@ -186,30 +189,6 @@ bool j1Physics::Update(float dt)
 
 		//Position
 		bullet.new_y = bullet.y + bullet.vy * dt + (bullet.new_ay / 2.0) * dt * dt;
-
-		//ground collisions
-		/*if (new_y - edge_length <= 0)
-		{
-			new_y = edge_length;
-			if (App->physics->isElastic) new_vy *= -1;
-			else new_vy = 0.0;
-		}*/
-
-		//left wall collisions
-		/*if (new_x - edge_length <= 0)
-		{
-			new_x = edge_length;
-			if (App->physics->isElastic) new_vx *= -1;
-			else new_vx = 0.0;
-		}*/
-
-		//right wall collisions
-		/*if (new_x + edge_length >= 1000)
-		{
-			new_x = 1000 - edge_length;
-			if (App->physics->isElastic) new_vx *= -1;
-			else new_vx = 0.0;
-		}*/
 
 		//Collision with target
 		if (bullet.new_x + bullet.getRadius() > target.getX() - target.getRadius() && bullet.new_y - bullet.getRadius() < target.getY() + target.getRadius() &&
@@ -452,30 +431,6 @@ bool object::update(float time, object _target, float CR)
 
 		//Position
 		new_y = y + vy * dt + (new_ay / 2.0) * dt * dt;
-
-		//ground collisions
-		/*if (new_y - edge_length <= 0)
-		{
-			new_y = edge_length;
-			if (App->physics->isElastic) new_vy *= -1;
-			else new_vy = 0.0;
-		}*/
-
-		//left wall collisions
-		/*if (new_x - edge_length <= 0)
-		{
-			new_x = edge_length;
-			if (App->physics->isElastic) new_vx *= -1;
-			else new_vx = 0.0;
-		}*/
-
-		//right wall collisions
-		/*if (new_x + edge_length >= 1000)
-		{
-			new_x = 1000 - edge_length;
-			if (App->physics->isElastic) new_vx *= -1;
-			else new_vx = 0.0;
-		}*/
 
 		//Collision with target
 		if (new_x + this->getRadius() > _target.getX() - _target.getRadius() && new_y - getRadius() < _target.getY() + _target.getRadius() &&

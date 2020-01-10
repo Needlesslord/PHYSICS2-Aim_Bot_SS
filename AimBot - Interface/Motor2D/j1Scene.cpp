@@ -54,14 +54,17 @@ bool j1Scene::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_KP_MINUS) == KEY_DOWN && App->audio->volume > 0)
 		App->audio->volume -= 2;
 
+	//Rendering background, Vegetta and Boo
 	App->render->Blit(bg_tex, -150, 0);
 	App->render->Blit(App->physics->target_tex_boo, App->physics->inputX, 550 - App->physics->inputY);
 
-	if (timer > 10) {
+	if (timer > 10) 
+	{
 		kicking = false;
 		timer = 0;
 	}
-	if (kicking) {
+	else if (kicking) 
+	{
 		App->render->Blit(App->physics->origin_tex_vegetta_SS_kick, App->physics->bullet_position.x - 70, 400 - App->physics->bullet_position.y);
 		timer++;
 	}
