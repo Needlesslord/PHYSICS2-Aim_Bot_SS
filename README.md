@@ -45,6 +45,7 @@ Basically, in general, the MC relies on a repeated random sampling (we require a
 [Science Direct: Montecarlo Method](https://www.sciencedirect.com/topics/neuroscience/monte-carlo-method)
 
 
+
 ***
 
 
@@ -87,7 +88,7 @@ The Montecarlo, since it is a method, it does not use formulas. What it does is 
 ## Installation
 
 
-Go to our GitHub repository and download the .zip. 
+Go to our GitHub repository and download the .zip. Decompress the .zip and start the app.
 
 Enjoy!
 
@@ -153,8 +154,6 @@ Instructions can be found in this same web page or in the readme.md file include
 ***
 
 
-# CHANGE ->
-
 
 ## Usage
 
@@ -166,6 +165,9 @@ Instructions can be found in this same web page or in the readme.md file include
 	[R]			Restart the simulation with the data updated from the .xml
 	[ENTER]/[RETURN]	Start the simulation. It can be restarted as many times as you want.
 
+To input the data open the "input.xml" file and change the variables. 
+
+(*) Note that you can run the app, change the values and press [R] to reload the new data and continue using it without closing the app.
 
 
 
