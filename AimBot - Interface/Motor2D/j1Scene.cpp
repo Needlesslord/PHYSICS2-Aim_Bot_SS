@@ -55,6 +55,8 @@ bool j1Scene::Update(float dt)
 		App->audio->volume -= 2;
 
 	App->render->Blit(bg_tex, -150, 0);
+	App->render->Blit(App->physics->origin_tex_vegetta_SS, App->physics->bullet_position.x, -App->physics->bullet_position.y);
+	App->render->Blit(App->physics->target_tex_boo, App->physics->inputX, -App->physics->inputY);
 
 	return true;
 }

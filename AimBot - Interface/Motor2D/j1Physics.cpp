@@ -13,7 +13,7 @@
 
 j1Physics::j1Physics()
 {
-	name.create("scene");
+	name.create("physics");
 }
 
 j1Physics::~j1Physics() {}
@@ -21,7 +21,7 @@ j1Physics::~j1Physics() {}
 // Called before render is available
 bool j1Physics::Awake(pugi::xml_node& config)
 {
-	LOG("Loading Scene");
+	LOG("Loading Physics");
 
 	inputX = config.child("target").child("position").attribute("x").as_float();
 	inputY = config.child("target").child("position").attribute("y").as_float();
@@ -35,7 +35,9 @@ bool j1Physics::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool j1Physics::Start()
 {
-	bullet_tex = App->tex->Load("textures/dragonBall2.png");
+	bullet_tex = App->tex->Load("textures/dragonBall.png");
+	target_tex_boo = App->tex->Load("textures/boo.png");
+	origin_tex_vegetta_SS = App->tex->Load("textures/vegetta.png");
 	bullet.setEdgeLength(0.2f);
 	bullet.area = bullet.edge_length * bullet.edge_length;
 	bullet.volume = bullet.edge_length * bullet.edge_length * bullet.edge_length;
@@ -98,8 +100,10 @@ bool j1Physics::Update(float dt)
 			}
 			//in case a result hasn't been found after 10.000 attempts the machine will try the maximum velocity in a straight line as a last try and then end the process
 			if (cont > 10) {
-				PropagateAll(50.0f, 0, App->physics->target);
-				//cout << "Speed: 50.0f" << endl << "Angle: 0" << endl;
+				solution_v = 50.0f;
+				solution_ang = 0.0f;
+				collided = true;
+				running = false;
 				break;
 			}
 			//we increase the number of Monte Carlo iterations
@@ -208,7 +212,7 @@ bool j1Physics::Update(float dt)
 		if (bullet.new_x + bullet.getRadius() > target.getX() - target.getRadius() && bullet.new_y - bullet.getRadius() < target.getY() + target.getRadius() &&
 			bullet.new_x - bullet.getRadius() < target.getX() + target.getRadius() && bullet.new_y + bullet.getRadius() > target.getY() - target.getRadius())
 			running = false;
-		App->render->Blit(bullet_tex, bullet.new_x, 500-bullet.new_y);
+		App->render->Blit(bullet_tex, bullet.new_x, 500 - bullet.new_y);
 	}
 	return true;
 }
