@@ -42,12 +42,18 @@ object::object()
 {
 	edge_length = 1.0f;
 	area = edge_length * edge_length;
+	volume = edge_length * edge_length* edge_length;
+	density = 10000.0f;
 	mass = volume * density;
 	vx = 0.0f;
 	vy = 0.0f;
 	ax = 0.0f;
 	ay = 0.0f;
-	isElastic = false;
+	isElastic = true;
+	CD = 1.05f;
+	CF = 0.00f;
+	ff = 0.0f;
+	
 }
 
 object::~object() {}
@@ -182,7 +188,7 @@ bool object::checkCollission(object _object)
 		return false;
 }
 
-bool object::update(float time, object _target, float CR)
+bool object::update(float time, object _target, float CR, bool console)
 {
 	unsigned int second = 0;
 	unsigned int frame = 0;
@@ -234,9 +240,9 @@ bool object::update(float time, object _target, float CR)
 
 		//Acceleration
 		if (new_vy <= 0.0)
-			new_ay = (GRAVITY + fy) / mass;
+			new_ay = fy / mass + GRAVITY;
 		else if (new_vy > 0.0)
-			new_ay = (GRAVITY - fy) / mass;
+			new_ay = -fy / mass + GRAVITY;
 
 		//Velocity
 		new_vy = vy + new_ay * dt;
@@ -267,7 +273,9 @@ bool object::update(float time, object _target, float CR)
 			if (isElastic) new_vx *= -1;
 			else new_vx = 0.0;
 		}
-
+		if (console) {
+			std::cout << x << " " << y << std::endl;
+		}
 		//Collision with target
 		if (x + this->getRadius() > _target.getX() - _target.getRadius() && y - getRadius() < _target.getY() + _target.getRadius() &&
 			x - this->getRadius() < _target.getX() + _target.getRadius() && y + getRadius() > _target.getY() - _target.getRadius())

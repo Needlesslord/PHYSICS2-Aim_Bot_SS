@@ -9,7 +9,7 @@
 #include <iostream>
 using namespace std;
 
-bool PropagateAll(float v, float ang, object target)
+bool PropagateAll(float v, float ang, object target, bool console2)
 {
 	float time = 3.0f;
 
@@ -20,10 +20,10 @@ bool PropagateAll(float v, float ang, object target)
 	bullet.setAY(GRAVITY);
 	bullet.setVX(v*cos(ang));
 	bullet.setVY(v*sin(ang));
-	bullet.setDensity(100.0f);
+	
 	bullet.setEdgeLength(0.2f);
-
-	if (bullet.update(time, target, 1))
+	
+	if (bullet.update(time, target, 1, console2))
 	{
 		return true;
 	}
@@ -70,11 +70,11 @@ int main()
 			float ang = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / pi));
 
 			//we try to hit the target with the random values
-			if (PropagateAll(v, ang, target))
+			if (PropagateAll(v, ang, target, false))
 			{
 				//we register the hit, which exits the loop
 				collided = true;
-
+				PropagateAll(v, ang, target, true);
 				//angles will be expressed in degrees so we make the conversion
 				ang *= 360 / (2 * pi);
 
@@ -84,7 +84,7 @@ int main()
 		}
 		//in case a result hasn't been found after 10.000 attempts the machine will try the maximum velocity in a straight line as a last try and then end the process
 		if (cont > 10) {
-			PropagateAll(50.0f, 0, target);
+			PropagateAll(50.0f, 0, target, false);
 			cout << "Speed: 50.0f, Angle: 0 was the last attempt. Target missed." << endl;
 			break;
 		}
