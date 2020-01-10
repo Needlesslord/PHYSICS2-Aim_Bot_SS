@@ -7,28 +7,23 @@ _______________________________________________________
 
 -->
 <save>
-	<input />
-	<window />
-	<textures />
+  
 	<audio>
 		<volume value="64" />
 	</audio>
-	<scene />
-	<renderer>
-		<camera x="0" y="0" />
-	</renderer>
+  
   <physics>
     
     <bullet>
-      <position x="30" y="0"/>
+      <position x="800" y="200"/>
       <density value="1000.0f"/>
       <edge length="0.1"/>
     </bullet>
-
     <target>
       <position x="100" y="500"/>
       <edge length="1"/>
     </target>
     
   </physics>
+  
 </save>
