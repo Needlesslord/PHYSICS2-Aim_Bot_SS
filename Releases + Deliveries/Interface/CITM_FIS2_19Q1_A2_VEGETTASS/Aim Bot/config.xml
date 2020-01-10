@@ -1,0 +1,44 @@
+<!-- 
+_______________________________________________________
+
+      DO NOT CHANGE THESE VALUES 
+      
+      IF YOU WISH TO CHANGE VALUES FOR THE AIMBOT,
+      USE INPUT.XML
+_______________________________________________________
+
+-->
+<config>
+  <app>
+    <title>AimBot</title>
+  </app>
+	
+  <renderer>
+    <vsync value="true"/>
+  </renderer>
+
+  <audio>
+    <volume value="64"></volume>
+  </audio>
+
+  <window>
+    <resolution width="1024" height="768" scale="1"/>
+    <fullscreen value="false"/>
+    <borderless value="false"/>
+    <resizable value="false"/>
+    <fullscreen_window value="false"/>
+  </window>
+
+  <physics>
+    <bullet>
+      <position x="70" y="0"/>
+      <elastic value="false"/>
+      <edge length="0.1"/>
+    </bullet>
+
+    <target>
+      <position x="700" y="100"/>
+      <edge length="1"/>
+    </target>
+  </physics>
+</config>

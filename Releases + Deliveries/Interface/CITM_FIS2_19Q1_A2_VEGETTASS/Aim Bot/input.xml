@@ -1,0 +1,29 @@
+<!-- 
+_______________________________________________________
+
+     CHANGE THESE VALUES TO EXPERIMENT WITH 
+                   OUR AIMBOT
+_______________________________________________________
+
+-->
+<save>
+  
+	<audio>
+		<volume value="64" />
+	</audio>
+  
+  <physics>
+    
+    <bullet>
+      <position x="800" y="200"/>
+      <density value="1000.0f"/>
+      <edge length="0.1"/>
+    </bullet>
+    <target>
+      <position x="100" y="500"/>
+      <edge length="1"/>
+    </target>
+    
+  </physics>
+  
+</save>
