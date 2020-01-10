@@ -120,7 +120,8 @@ public:
 
 	//this will be the object we'll aim at
 	object target;
-	SDL_Texture* target_tex;
+	SDL_Texture* target_tex_boo;
+	SDL_Texture* origin_tex_vegetta_SS;
 	SDL_Texture* bullet_tex;
 
 	object bullet;
