@@ -30,7 +30,7 @@ bool j1Scene::Awake(pugi::xml_node& config)
 bool j1Scene::Start()
 {
 	bg_tex = App->tex->Load("textures/background.png");
-	//App->audio->PlayMusic("audio/music/music_sadpiano.ogg"); //TODO: uncomment
+	App->audio->PlayMusic("audio/music/music.ogg");
 
 	
 	return true;
@@ -48,10 +48,10 @@ bool j1Scene::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN)
 		App->load = true;
 
-	if (App->input->GetKey(SDL_SCANCODE_KP_PLUS) == KEY_DOWN && App->audio->volume < 128)
+	if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN && App->audio->volume < 128)
 		App->audio->volume += 2;
 
-	if (App->input->GetKey(SDL_SCANCODE_KP_MINUS) == KEY_DOWN && App->audio->volume > 0)
+	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN && App->audio->volume > 0)
 		App->audio->volume -= 2;
 
 	App->render->Blit(bg_tex, -150, 0);

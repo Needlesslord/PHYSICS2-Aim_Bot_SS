@@ -23,7 +23,7 @@
 
   <physics>
     <bullet>
-      <position x="30" y="0"/>
+      <position x="70" y="0"/>
       <elastic value="false"/>
       <edge length="0.1"/>
     </bullet>

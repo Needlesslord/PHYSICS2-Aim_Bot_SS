@@ -8,6 +8,18 @@
 	</audio>
 	<scene />
 	<renderer>
-		<camera x="247" y="0" />
+		<camera x="0" y="0" />
 	</renderer>
+  <physics>
+    <bullet>
+      <position x="30" y="0"/>
+      <density value="1000.0f"/>
+      <edge length="0.1"/>
+    </bullet>
+
+    <target>
+      <position x="700" y="100"/>
+      <edge length="1"/>
+    </target>
+  </physics>
 </save>

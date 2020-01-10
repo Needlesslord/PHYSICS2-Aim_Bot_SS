@@ -84,7 +84,7 @@ bool j1Physics::Update(float dt)
 			{
 				//we give random values to the velocity and the angle for each attempt
 				//the velocity will be a semi-random value from 0 to 50 to avoid straight shots with infinite velocity which would guarantee a hit
-				solution_v = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 500.0f));
+				solution_v = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 700.0f));
 
 				//the angle will be a semi-random value from 0 to pi radians to enable the target to be to the left of the bullet's initial position
 				solution_ang = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / pi));
@@ -507,7 +507,78 @@ bool j1Physics::PropagateAll(float v, float ang, object target)
 
 bool j1Physics::Load(pugi::xml_node& saved)
 {
-	//volume = saved.child("volume").attribute("value").as_int();
+	//Load Target Position within Window
+	inputX = saved.child("target").child("position").attribute("x").as_float();
+	inputY = saved.child("target").child("position").attribute("y").as_float();
+	if (inputX > 900)
+		inputX = 900;
+	if(inputX < 70)
+		inputY = 70;
+	if (inputY > 500)
+		inputX = 500;
+	if (inputX < 0)
+		inputY = 0;
+	target.setX(inputX);
+	target.setY(inputY);
+	//Load Target Radius
+	if(saved.child("target").child("edge").attribute("length").as_float() != 0)
+		target.setEdgeLength(saved.child("target").child("edge").attribute("length").as_float());
 
-	return true;
+	//Load Bullet Initial Position within Window
+	bullet.x = saved.child("bullet").child("position").attribute("x").as_float();
+	bullet.y = saved.child("bullet").child("position").attribute("y").as_float();
+	if (bullet.x > 900)
+		bullet.x = 900;
+	if (bullet.x < 70)
+		bullet.x = 70;
+	if (bullet.y > 500)
+		bullet.y = 500;
+	if (bullet.y < 0)
+		bullet.y = 0;
+	bullet_position.x = bullet.x;
+	bullet_position.y = bullet.y;
+	//Load Bullet Radius
+	if(saved.child("bullet").child("edge").attribute("length").as_float() != 0)
+		bullet.setEdgeLength(saved.child("bullet").child("edge").attribute("length").as_float());
+	//Load Bullet Density
+	if (saved.child("bullet").child("density").attribute("value").as_float() != 0)
+		bullet.setDensity(saved.child("bullet").child("density").attribute("value").as_float());
+
+	//APPLY MONTECARLO AGAIN
+
+	collided = false;
+	unsigned int cont = 0;
+	while (!collided)
+	{
+		//Monte Carlo:
+		for (unsigned int i = 0; i < 1000 && !collided; i++)
+		{
+			//we give random values to the velocity and the angle for each attempt
+			//the velocity will be a semi-random value from 0 to 50 to avoid straight shots with infinite velocity which would guarantee a hit
+			solution_v = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / 700.0f));
+
+			//the angle will be a semi-random value from 0 to pi radians to enable the target to be to the left of the bullet's initial position
+			solution_ang = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / pi));
+
+			//we try to hit the target with the random values
+			if (PropagateAll(solution_v, solution_ang, App->physics->target))
+			{
+				//we register the hit, which exits the loop
+				collided = true;
+				running = false;
+			}
+
+		}
+		//in case a result hasn't been found after 10.000 attempts the machine will try the maximum velocity in a straight line as a last try and then end the process
+		if (cont > 10) {
+			solution_v = 50.0f;
+			solution_ang = 0.0f;
+			collided = true;
+			running = false;
+			break;
+		}
+		//we increase the number of Monte Carlo iterations
+		cont++;
+	}
+		return true;
 }
