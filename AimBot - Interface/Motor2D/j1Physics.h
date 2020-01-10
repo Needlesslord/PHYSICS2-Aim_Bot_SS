@@ -122,6 +122,7 @@ public:
 	object target;
 	SDL_Texture* target_tex_boo;
 	SDL_Texture* origin_tex_vegetta_SS;
+	SDL_Texture* origin_tex_vegetta_SS_kick;
 	SDL_Texture* bullet_tex;
 
 	object bullet;

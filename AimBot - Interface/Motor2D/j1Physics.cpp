@@ -38,6 +38,7 @@ bool j1Physics::Start()
 	bullet_tex = App->tex->Load("textures/dragonBall.png");
 	target_tex_boo = App->tex->Load("textures/boo.png");
 	origin_tex_vegetta_SS = App->tex->Load("textures/vegetta.png");
+	origin_tex_vegetta_SS_kick = App->tex->Load("textures/vegetta_kick.png");
 	bullet.setEdgeLength(0.2f);
 	bullet.area = bullet.edge_length * bullet.edge_length;
 	bullet.volume = bullet.edge_length * bullet.edge_length * bullet.edge_length;
@@ -130,6 +131,8 @@ bool j1Physics::Update(float dt)
 			bullet.vy = solution_v*sin(solution_ang);
 			bullet.new_vy = bullet.vy;
 			running = true;
+
+			App->scene->kicking = true;
 		}
 	}
 	
@@ -212,7 +215,7 @@ bool j1Physics::Update(float dt)
 		if (bullet.new_x + bullet.getRadius() > target.getX() - target.getRadius() && bullet.new_y - bullet.getRadius() < target.getY() + target.getRadius() &&
 			bullet.new_x - bullet.getRadius() < target.getX() + target.getRadius() && bullet.new_y + bullet.getRadius() > target.getY() - target.getRadius())
 			running = false;
-		App->render->Blit(bullet_tex, bullet.new_x, 500 - bullet.new_y);
+		App->render->Blit(bullet_tex, bullet.new_x, 600 - bullet.new_y);
 	}
 	return true;
 }

@@ -35,7 +35,9 @@ public:
 	bool CleanUp();
 private:
 	SDL_Texture* bg_tex;
-
+	uint timer;
+public:
+	bool kicking;
 };
 
 #endif // __j1SCENE_H__
