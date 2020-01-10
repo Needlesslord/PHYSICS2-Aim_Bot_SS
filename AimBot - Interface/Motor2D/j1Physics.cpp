@@ -479,7 +479,7 @@ bool j1Physics::Load(pugi::xml_node& saved)
 	target.setX(inputX);
 	target.setY(inputY);
 	//Load Target Radius
-	if(saved.child("target").child("edge").attribute("length").as_float() != 0)
+	if(saved.child("target").child("edge").attribute("length").as_float() < 0)
 		target.setEdgeLength(saved.child("target").child("edge").attribute("length").as_float());
 
 	//Load Bullet Initial Position within Window
@@ -496,10 +496,10 @@ bool j1Physics::Load(pugi::xml_node& saved)
 	bullet_position.x = bullet.x;
 	bullet_position.y = bullet.y;
 	//Load Bullet Radius
-	if(saved.child("bullet").child("edge").attribute("length").as_float() != 0)
+	if(saved.child("bullet").child("edge").attribute("length").as_float() < 0)
 		bullet.setEdgeLength(saved.child("bullet").child("edge").attribute("length").as_float());
 	//Load Bullet Density
-	if (saved.child("bullet").child("density").attribute("value").as_float() != 0)
+	if (saved.child("bullet").child("density").attribute("value").as_float() < 0)
 		bullet.setDensity(saved.child("bullet").child("density").attribute("value").as_float());
 
 	//APPLY MONTECARLO AGAIN
