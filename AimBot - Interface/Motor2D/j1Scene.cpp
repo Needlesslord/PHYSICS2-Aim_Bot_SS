@@ -32,7 +32,7 @@ bool j1Scene::Start()
 	bg_tex = App->tex->Load("textures/background.png");
 	App->audio->PlayMusic("audio/music/music.ogg");
 
-	
+	kicking = false;
 	return true;
 }
 
@@ -54,9 +54,22 @@ bool j1Scene::Update(float dt)
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN && App->audio->volume > 0)
 		App->audio->volume -= 2;
 
+	//Rendering background, Vegetta and Boo
 	App->render->Blit(bg_tex, -150, 0);
-	App->render->Blit(App->physics->origin_tex_vegetta_SS, App->physics->bullet_position.x - 70, 400 -App->physics->bullet_position.y);
-	App->render->Blit(App->physics->target_tex_boo, App->physics->inputX, 450 - App->physics->inputY);
+	App->render->Blit(App->physics->target_tex_boo, App->physics->inputX, 550 - App->physics->inputY);
+
+	if (timer > 10) 
+	{
+		kicking = false;
+		timer = 0;
+	}
+	else if (kicking) 
+	{
+		App->render->Blit(App->physics->origin_tex_vegetta_SS_kick, App->physics->bullet_position.x - 70, 400 - App->physics->bullet_position.y);
+		timer++;
+	}
+	else
+		App->render->Blit(App->physics->origin_tex_vegetta_SS, App->physics->bullet_position.x - 70, 400 - App->physics->bullet_position.y);
 
 	return true;
 }

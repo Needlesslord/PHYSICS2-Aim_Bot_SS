@@ -1,5 +1,13 @@
-<!-- Config file for the game -->
+<!-- 
+_______________________________________________________
 
+      DO NOT CHANGE THESE VALUES 
+      
+      IF YOU WISH TO CHANGE VALUES FOR THE AIMBOT,
+      USE INPUT.XML
+_______________________________________________________
+
+-->
 <config>
   <app>
     <title>AimBot</title>
