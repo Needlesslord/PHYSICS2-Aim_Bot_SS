@@ -164,6 +164,7 @@ Instructions can be found in this same web page or in the readme.md file include
 
 	[R]			Restart the simulation with the data updated from the .xml
 	[ENTER]/[RETURN]	Start the simulation. It can be restarted as many times as you want.
+	[ESC]			Exit the app
 
 To input the data open the "input.xml" file and change the variables. 
 
@@ -175,9 +176,14 @@ To input the data open the "input.xml" file and change the variables.
 
 
 
-## Content and accomplishments
+## Content
 
-We accomplished everything we wanted and a little bit more. As said in the introduction, we wanted to develop an Aim Bot with an interface, which we did. The Montecarlo works perfectly with the Verlet, the screen doesn’t freeze and the the movement is done smoothly. We implemented as an extra the keys “Enter”/”Return” and “R”, the first one to shoot and the second one to load the info the user wants from an .xml. In the end, we decided to no let the user choose whether the collision was elastic or not because the can exit and reenter the window if needed, instead of colliding with the limits. We thought it was more realistic and unnecessary. We are confident in our Aim Bot and happy and proud of the results, even with the reduced scope.
+
+In this integrator you are shown a welcome message at first and a small tutorial. 
+
+After that, you input the data and all the frames will be displayed on the screen afterwards.
+
+In the final results, it will also be displayed in case you want to the results of calculating everything with the Newton's Laws.
 
 
 
@@ -188,9 +194,9 @@ We accomplished everything we wanted and a little bit more. As said in the intro
 ## Disclosure
 
 
-This is an Aim Bot made by second year students of the Videogame Design and Development degree taught at CITM-TTC.
+This is an integrator made by second year students of the Videogame Design and Development degree taught at CITM-TTC.
 
-The Aim Bot has been made using C++, using SDL libraries.
+The integrator has been made using C++, using SDL libraries.
 
 
 
